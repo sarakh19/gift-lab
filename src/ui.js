@@ -60,7 +60,7 @@ export function initUI(store) {
               `<article class="product-card">${art(product)}<div class="product-content"><p class="product-category">${product.category} · ${product.occasions.join('، ')}</p><h3>${product.name}</h3><p>${product.description}</p><div class="product-bottom"><div><strong>${money(product.price)}</strong><small>سعر تجريبي</small></div><button class="add-button" data-product="${product.id}" aria-label="تخصيص ${product.name} وإضافته">خصّص وأضف <span aria-hidden="true">+</span></button></div></div></article>`,
           )
           .join('')
-      : '<div class="empty"><h3>لم نجد هدية بهذه الاختيارات</h3><p>جرّب كلمة مختلفة أو امسح الفلاتر لتظهر كل الهدايا.</p><button class="quiet" data-reset>عرض كل الهدايا</button></div>';
+      : '<div class="empty"><h3>ما لقينا هدية بهالاختيارات</h3><p>جرّبي كلمة ثانية أو امسحي الفلاتر وشوفي كل الهدايا.</p><button class="quiet" data-reset>عرض كل الهدايا</button></div>';
     get('occasion-links')
       .querySelectorAll('[data-occasion]')
       .forEach((button) =>
@@ -89,7 +89,7 @@ export function initUI(store) {
               )}</p><div class="quantity"><button class="quiet" data-action="decrease" aria-label="تقليل كمية ${product.name}" ${row.quantity === 1 ? 'disabled' : ''}>−</button><label for="quantity-${index}">الكمية</label><input id="quantity-${index}" data-action="quantity" type="number" min="1" max="${MAX_QUANTITY}" step="1" value="${row.quantity}" required /><button class="quiet" data-action="increase" aria-label="زيادة كمية ${product.name}" ${row.quantity === MAX_QUANTITY ? 'disabled' : ''}>+</button><button class="quiet remove" data-action="remove">حذف</button><strong>${money(product.price * row.quantity)}</strong></div></article>`;
           })
           .join('')
-      : '<p class="empty">سلتك تنتظر أول هدية. اختر ما يُشبه مناسبتك.</p>';
+      : '<p class="empty">سلتك تنتظر هدية تفرّح غاليك. اختاري اللي يناسب مناسبتك.</p>';
   };
   filtersForm.addEventListener('submit', (event) => event.preventDefault());
   filtersForm.addEventListener('input', renderProducts);
@@ -135,7 +135,7 @@ export function initUI(store) {
     get('custom-dialog').close();
     announce(
       success
-        ? 'أُضيفت الهدية إلى سلتك التجريبية'
+        ? 'تمّت الإضافة، هديتك صارت في السلة التجريبية'
         : 'وصلت للحد التقني التجريبي: 99 قطعة لكل تخصيص.',
     );
   });

@@ -32,3 +32,9 @@
 ## الخط
 
 Readex Pro من Google Fonts محفوظ محليًا في `public/fonts/` بأوزان 400 و500 و600. [ملف الرخصة الأصلي](https://raw.githubusercontent.com/google/fonts/main/ofl/readexpro/OFL.txt) محفوظ بجانب الخط باسم `OFL.txt`. يضبط `@font-face` في `src/styles.css` الخط دون أي طلب خارجي أثناء الاستخدام.
+
+## تحديث الخطوط والمرجع البصري
+
+أصبح الخط المستخدم IBM Plex Sans Arabic (400/500/600) للنصوص وNoto Naskh Arabic (400/500) للعناوين، محليًا داخل public/fonts. رخصتاهما في OFL-IBM-Plex-Sans-Arabic.txt وOFL-Noto-Naskh-Arabic.txt. مصدر الملفات Google Fonts، ومصدر الرخصتين [IBM Plex Sans Arabic](https://raw.githubusercontent.com/google/fonts/main/ofl/ibmplexsansarabic/OFL.txt) و[Noto Naskh Arabic](https://raw.githubusercontent.com/google/fonts/main/ofl/notonaskharabic/OFL.txt). ملفات Readex Pro السابقة محفوظة لكنها غير مستخدمة حاليًا.
+
+لم تُغيّر الصور في متابعة البانر الكامل. حساب المحل https://www.tiktok.com/@glab_sa لم يكن متاحًا للقراءة الآلية؛ لا صور أو فيديوهات مأخوذة منه، والصور المؤقتة السابقة لا تمثل تنسيقاته المعتمدة.

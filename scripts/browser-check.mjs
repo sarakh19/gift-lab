@@ -129,7 +129,17 @@ try {
   );
   await evaluate('document.fonts.ready');
   assert.equal(
-    await evaluate('document.fonts.check("400 16px Readex Pro")'),
+    await evaluate('document.fonts.check("400 16px IBM Plex Sans Arabic")'),
+    true,
+  );
+  assert.equal(
+    await evaluate('document.fonts.check("400 24px Noto Naskh Arabic")'),
+    true,
+  );
+  assert.equal(
+    await evaluate(
+      'Math.abs(document.querySelector(".hero").getBoundingClientRect().width - document.documentElement.clientWidth) < 1',
+    ),
     true,
   );
   const imagePaths = await evaluate(
@@ -144,6 +154,18 @@ try {
       mobile: false,
     });
     await pause(250);
+    assert.equal(
+      await evaluate(
+        'Math.abs(document.querySelector(".hero").getBoundingClientRect().width-document.documentElement.clientWidth)<1',
+      ),
+      true,
+    );
+    assert.equal(
+      await evaluate(
+        'getComputedStyle(document.querySelector(".hero-copy")).textAlign',
+      ),
+      'start',
+    );
     assert.equal(
       await evaluate('document.documentElement.scrollWidth<=innerWidth'),
       true,

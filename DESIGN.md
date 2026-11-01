@@ -82,3 +82,13 @@ The user requested a refinement of the existing storefront, preserving its data 
 - Existing sample prices, options, product text, account demonstration and cart behavior remain unchanged. Temporary photographs are not claims about approved Gift Lab products or packaging.
 
 Exact final photography, brand assets and commercial content still require client approval.
+
+## Full-width storefront and Saudi copy — 1 November 2026
+
+This latest direction follows the user's review of the previous design and supersedes the Readex Pro typography and split-panel hero described above.
+
+- The hero photograph fills an edge-to-edge section; text sits on the right in an RTL content container. A warm directional gradient protects text contrast while leaving the gift visible. Mobile uses a taller composition and vertical gradient; desktop uses a horizontal composition. This is a full-width image treatment, not a separate image card.
+- Typography now pairs IBM Plex Sans Arabic (400/500/600) for interface/body copy with Noto Naskh Arabic (400/500) for editorial headings. Both are hosted locally with font-display:swap and their own OFL files in public/fonts. Earlier font assets are retained but not loaded.
+- The desktop wordmark is centered, with navigation to its right and account/cart controls to its left. Use restrained warm brown/terracotta details and off-white/cream surfaces; preserve the two/three/four-column product grid and existing photographs.
+- Primary Saudi wording includes “هدايا تليق بغلاهم”، “وش مناسبتك؟”، “تفاصيل تفرّح الخاطر” and “خلّيها على ذوقك”. Preserve explicit educational/demo messages and avoid inventing commercial promises.
+- The user supplied https://www.tiktok.com/@glab_sa as a visual reference. Automated browsing was blocked and the direct public response contained a protection challenge, not account content. No TikTok videos or products were actually reviewed or copied. Current visual choices rely on the user's instructions and existing client requirements. Matching the shop's actual fabric arrangements and photography still requires accessible reference images from the account.
