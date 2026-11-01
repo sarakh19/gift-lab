@@ -225,6 +225,13 @@ try {
       'document.querySelector("#catalog").scrollIntoView({behavior:"instant"})',
     );
     await pause(250);
+    assert.equal(
+      await evaluate(
+        'Math.abs(document.querySelector(".header-shell").getBoundingClientRect().top)<1 && document.querySelector(".site-header .brand").getBoundingClientRect().bottom>0',
+      ),
+      true,
+      'Store header stays visible while scrolling',
+    );
     const catalogImage = await cdp('Page.captureScreenshot', { format: 'png' });
     await writeFile(
       resolve(output, `catalog-${width}.png`),
@@ -240,6 +247,22 @@ try {
     await writeFile(
       resolve(output, `customization-${width}.png`),
       Buffer.from(customizationImage.data, 'base64'),
+    );
+    await evaluate(
+      'document.querySelector(".site-footer").scrollIntoView({behavior:"instant"})',
+    );
+    await pause(150);
+    assert.equal(
+      await evaluate(
+        'document.querySelectorAll(".site-footer nav a").length===4 && [...document.querySelectorAll(".site-footer nav a")].every(a=>document.querySelector(a.getAttribute("href")))',
+      ),
+      true,
+      'Footer links reach existing sections',
+    );
+    const footerImage = await cdp('Page.captureScreenshot', { format: 'png' });
+    await writeFile(
+      resolve(output, `footer-${width}.png`),
+      Buffer.from(footerImage.data, 'base64'),
     );
     await evaluate('scrollTo({top:0,behavior:"instant"})');
     results.push(

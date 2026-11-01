@@ -1506,3 +1506,177 @@ input,
 select {
   font-weight: 500;
 }
+
+/* Keep store navigation visible and separate the hero photograph from its copy. */
+html {
+  scroll-padding-top: 145px;
+}
+.header-shell {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--page-wash);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header {
+  padding-block: 0.7rem;
+}
+.site-header .brand small {
+  font-weight: 500;
+  color: var(--text);
+}
+.hero {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  background: var(--page);
+}
+.hero::after {
+  display: none;
+}
+.hero-content {
+  grid-row: 1;
+}
+.hero-copy {
+  padding-block: 2rem 1rem;
+}
+.hero-art {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  grid-row: 2;
+  width: min(100%, 540px);
+  margin-inline: auto;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--photo);
+  border-radius: 12px;
+}
+.hero-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.hero-bottom {
+  grid-row: 3;
+  background: transparent;
+  border-top: 1px solid var(--line);
+  margin-top: 1.25rem;
+}
+.site-footer {
+  display: block;
+  margin-top: 2rem;
+  padding: 0;
+  background: var(--secondary);
+  border-top: 1px solid var(--line);
+}
+.footer-main {
+  display: grid;
+  gap: 2rem;
+  padding-block: 2.5rem;
+}
+.footer-identity .brand {
+  width: fit-content;
+}
+.footer-identity > p {
+  margin-block: 1rem 0;
+  font-size: 0.9rem;
+}
+.footer-identity .footer-description {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 2;
+}
+.footer-main nav {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+}
+.footer-main h2 {
+  font-size: 0.95rem;
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+.footer-main nav a,
+.footer-message a {
+  font-size: 0.8rem;
+  width: fit-content;
+  padding-block: 0.25rem;
+}
+.site-footer a:hover {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.footer-message > p:not(.eyebrow) {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  margin-block: 0.4rem 1rem;
+}
+.footer-message a {
+  display: inline-flex;
+  gap: 1rem;
+}
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: 1.2rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+.footer-bottom small {
+  font-size: inherit;
+}
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 120px;
+  }
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    padding-top: 1.5rem;
+  }
+  .hero-content {
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    margin-inline: max(2rem, calc((100vw - 1240px) / 2)) 1rem;
+  }
+  .hero-copy {
+    padding-block: 1.5rem;
+    max-width: 480px;
+  }
+  .hero-art {
+    grid-column: 2;
+    grid-row: 1;
+    width: calc(100% - 2rem);
+    max-width: 540px;
+    margin-inline: 0 auto;
+  }
+  .hero-bottom {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .footer-main {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 2rem;
+  }
+}
+@media (min-width: 1280px) {
+  .hero {
+    padding-top: 2rem;
+  }
+  .hero-art {
+    margin-inline: 0 max(2rem, calc((100vw - 1240px) / 2));
+  }
+  .footer-main {
+    padding-block: 3rem;
+  }
+}

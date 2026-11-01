@@ -11,28 +11,27 @@
   </head>
   <body>
     <a class="skip-link" href="#catalog">انتقل إلى المنتجات</a>
-    <header class="site-header wrap">
-      <a
-        class="brand"
-        href="#"
-        aria-label="GIFT LAB — جيفت لاب، للغلا، تفاصيله، الرئيسية"
-        ><span class="brand-mark" aria-hidden="true">✧</span
-        ><span
-          ><b lang="en" dir="ltr">GIFT LAB</b
-          ><small>للغلا، تفاصيله</small></span
-        ></a
-      >
-      <nav aria-label="التنقل الرئيسي">
-        <a href="#catalog">الهدايا</a><a href="#customization">التخصيص</a
-        ><a href="#occasions">المناسبات</a><a href="#about">عن جيفت لاب</a>
-      </nav>
-      <div class="header-actions">
-        <button id="account-open" class="quiet">الحساب</button
-        ><button id="cart-open" class="cart-button">
-          السلة <span id="cart-count">0</span>
-        </button>
-      </div>
-    </header>
+    <div class="header-shell">
+      <header class="site-header wrap">
+        <a class="brand" href="#"
+          ><span class="brand-mark" aria-hidden="true">✧</span
+          ><span
+            ><b lang="en" dir="ltr">GIFT LAB</b
+            ><small>جيفت لاب · للغلا، تفاصيله</small></span
+          ></a
+        >
+        <nav aria-label="التنقل الرئيسي">
+          <a href="#catalog">الهدايا</a><a href="#customization">التخصيص</a
+          ><a href="#occasions">المناسبات</a><a href="#about">عن جيفت لاب</a>
+        </nav>
+        <div class="header-actions">
+          <button id="account-open" class="quiet">الحساب</button
+          ><button id="cart-open" class="cart-button">
+            السلة <span id="cart-count">0</span>
+          </button>
+        </div>
+      </header>
+    </div>
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-art">
@@ -189,9 +188,38 @@
         </div>
       </section>
     </main>
-    <footer class="wrap">
-      <a class="brand" href="#" lang="en" dir="ltr">GIFT LAB ✧</a>
-      <p>للغلا، تفاصيل تستاهله.</p>
+    <footer class="site-footer">
+      <div class="footer-main wrap">
+        <div class="footer-identity">
+          <a class="brand" href="#"
+            ><span class="brand-mark" aria-hidden="true">✧</span
+            ><span
+              ><b lang="en" dir="ltr">GIFT LAB</b><small>جيفت لاب</small></span
+            ></a
+          >
+          <p>للغلا، تفاصيل تستاهله.</p>
+          <p class="footer-description">
+            هدايا وتوزيعات، ولمسة تنسيق على ذوقك.<br />من الدمام، لمناسباتكم
+            الحلوة.
+          </p>
+        </div>
+        <nav aria-label="روابط المتجر">
+          <h2>اكتشفي جيفت لاب</h2>
+          <a href="#catalog">تسوّقي الهدايا</a
+          ><a href="#occasions">اختاري مناسبتك</a
+          ><a href="#customization">خصّصي هديتك</a
+          ><a href="#about">عن جيفت لاب</a>
+        </nav>
+        <div class="footer-message">
+          <p class="eyebrow">لكل فرحة، هدية</p>
+          <p>تفاصيل صغيرة،<br />وأثر يبقى.</p>
+          <a href="#">العودة للأعلى <span aria-hidden="true">↑</span></a>
+        </div>
+      </div>
+      <div class="footer-bottom wrap">
+        <small>© 2026 جيفت لاب. جميع الحقوق محفوظة.</small
+        ><span>صُنعت التفاصيل للغاليين.</span>
+      </div>
     </footer>
     <dialog id="custom-dialog" aria-labelledby="custom-title">
       <div class="dialog-top">
