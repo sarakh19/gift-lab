@@ -1,4 +1,4 @@
-﻿import { categories, occasions, products } from './data.js';
+import { categories, occasions, products, homeImages } from './data.js';
 import { cartTotals, filterProducts, MAX_QUANTITY } from './logic.js';
 
 const money = (value) => `${new Intl.NumberFormat('ar-SA').format(value)} ر.س`;
@@ -18,11 +18,18 @@ const optionHTML = (values) =>
     )
     .join('');
 const art = (product) =>
-  `<div class="product-art ${product.tone}"><img src="/${product.art}.svg" alt="رسم توضيحي بديل لصورة ${escapeHTML(product.name)}" loading="lazy" width="300" height="250" /><span>رسم توضيحي</span></div>`;
+  `<div class="product-art"><img src="${escapeHTML(product.image.src)}" alt="${escapeHTML(product.image.alt)} — صورة مؤقتة" loading="lazy" decoding="async" width="800" height="880" /></div>`;
 
 export function initUI(store) {
   const get = (id) => document.getElementById(id);
   const filtersForm = get('filters');
+  for (const [key, id] of [
+    ['hero', 'hero-image'],
+    ['customization', 'customization-image'],
+  ]) {
+    get(id).src = homeImages[key].src;
+    get(id).alt = homeImages[key].alt + ' — صورة فوتوغرافية مؤقتة';
+  }
   let selectedProduct;
   let toastTimer;
   const announce = (message) => {
@@ -34,11 +41,10 @@ export function initUI(store) {
   };
   get('category').insertAdjacentHTML('beforeend', optionHTML(categories));
   get('occasion').insertAdjacentHTML('beforeend', optionHTML(occasions));
-  const occasionSymbols = ['✧', '♡', '☆', '☾', '✺', '❀', '◇', '⌂'];
   get('occasion-links').innerHTML = occasions
     .map(
-      (occasion, index) =>
-        `<button class="occasion-card" data-occasion="${occasion}" aria-pressed="false"><span aria-hidden="true">${occasionSymbols[index]}</span>${occasion}</button>`,
+      (occasion) =>
+        `<button class="occasion-card" data-occasion="${occasion}" aria-pressed="false">${occasion}</button>`,
     )
     .join('');
 

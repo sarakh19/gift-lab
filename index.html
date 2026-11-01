@@ -12,7 +12,7 @@
   <body>
     <a class="skip-link" href="#catalog">انتقل إلى المنتجات</a>
     <div class="demo-strip">
-      نسخة تعليمية · المنتجات والأسعار والخيارات للتجربة فقط
+      نسخة تعليمية · الصور والأسعار والخيارات مؤقتة وغير معتمدة
     </div>
     <header class="site-header wrap">
       <a class="brand" href="#" aria-label="جيفت لاب، الرئيسية"
@@ -23,8 +23,8 @@
         ></a
       >
       <nav aria-label="التنقل الرئيسي">
-        <a href="#catalog">الهدايا</a><a href="#occasions">المناسبات</a
-        ><a href="#about">عن جيفت لاب</a>
+        <a href="#catalog">الهدايا</a><a href="#customization">التخصيص</a
+        ><a href="#occasions">المناسبات</a><a href="#about">عن جيفت لاب</a>
       </nav>
       <div class="header-actions">
         <button id="account-open" class="quiet">الحساب</button
@@ -49,8 +49,11 @@
         </div>
         <div class="hero-art">
           <img
-            src="/gift-scene.svg"
-            alt="رسم توضيحي لصناديق هدايا بأشرطة قماشية ونباتات، بديل محلي للصور"
+            id="hero-image"
+            width="1200"
+            height="800"
+            alt=""
+            fetchpriority="high"
           /><span class="art-note">هدية من القلب، بتفاصيلك أنت</span>
         </div>
       </section>
@@ -76,7 +79,7 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">اختيرت لتُلهمك</p>
-            <h2 id="catalog-title">هدايا بتفاصيل مميزة</h2>
+            <h2 id="catalog-title">هدايا مختارة لك</h2>
           </div>
           <span class="demo-label">كتالوج تجريبي</span>
         </div>
@@ -115,8 +118,38 @@
         <p id="results-count" class="results" role="status"></p>
         <div id="products" class="product-grid"></div>
       </section>
+      <section
+        id="customization"
+        class="customization wrap"
+        aria-labelledby="customization-title"
+      >
+        <div class="customization-photo">
+          <img
+            id="customization-image"
+            width="800"
+            height="1000"
+            loading="lazy"
+            alt=""
+          />
+        </div>
+        <div class="customization-copy">
+          <p class="eyebrow">لأن التفاصيل تصنع الفرق</p>
+          <h2 id="customization-title">هدية تختارها،<br />ولمسة تُشبهك.</h2>
+          <p>
+            من لون الشريط إلى بطاقة الإهداء، استكشف خيارات كل منتج واجعل
+            اختياراتك جزءًا من الهدية.
+          </p>
+          <ul class="customization-details">
+            <li>ألوان متناغمة</li>
+            <li>تغليف بعناية</li>
+            <li>كلمات من القلب</li>
+          </ul>
+          <a class="text-link" href="#catalog"
+            >اختر هديتك وخصّصها <span aria-hidden="true">←</span></a
+          ><small>خيارات تخصيص تجريبية تختلف حسب المنتج.</small>
+        </div>
+      </section>
       <section id="about" class="about wrap">
-        <span aria-hidden="true">✧</span>
         <div>
           <p class="eyebrow">وراء كل هدية، اهتمام</p>
           <h2>مساحة للهدايا التي تُشبه أصحابها</h2>

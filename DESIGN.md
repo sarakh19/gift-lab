@@ -68,3 +68,17 @@ Avoid showing every section with equal emphasis. Use spacing and clear headings 
 - Border/shadow strength and detailed responsive breakpoints.
 
 Update this file when Sara makes a design decision. Preserve the calm, cohesive, product-first direction unless she explicitly changes it.
+
+## Visual refinement — 1 November 2026
+
+The user requested a refinement of the existing storefront, preserving its data and working features. This supersedes the earlier illustration-based presentation.
+
+- Use real temporary stock photographs until approved Gift Lab photography is supplied. Product pictures are distinct, stored locally in `public/images/`, and selected through `products[].image` in `src/data.js`. Hero and customization photographs use `homeImages` in the same file. See `docs/image-sources.md` for source/credit records.
+- Current Arabic typeface: locally hosted Readex Pro, weights 400, 500 and 600, with `font-display: swap`. Its SIL Open Font License is included in `public/fonts/OFL.txt`.
+- Keep the original warm off-white and cream palette. Light terracotta `#C9846B` is reserved for the primary action and small details; deeper terracotta is used for readable text/focus. Product photographs supply the varied colors.
+- Compact product cards: two columns on phones, three from 768px, four from 1280px. Uniform image frames use `object-fit: contain` so product photos are not cropped. Cards have no enclosing border or shadow.
+- Reduce the main heading and section headings, avoid large decorative occasion icons, and use simple text occasion buttons with a selected state.
+- Homepage order: storefront header, photographic welcome, occasion discovery, featured/catalog products with the existing filters, photographic customization section, concise store information and footer.
+- Existing sample prices, options, product text, account demonstration and cart behavior remain unchanged. Temporary photographs are not claims about approved Gift Lab products or packaging.
+
+Exact final photography, brand assets and commercial content still require client approval.

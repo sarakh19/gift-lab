@@ -1,4 +1,4 @@
-﻿import { spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { mkdir, writeFile, rm } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import assert from 'node:assert/strict';
@@ -106,7 +106,9 @@ try {
   };
   await cdp('Runtime.enable');
   await cdp('Page.enable');
-  await cdp('Page.navigate', { url: 'http://127.0.0.1:5173' });
+  await cdp('Page.navigate', {
+    url: process.env.GIFTLAB_QA_URL || 'http://127.0.0.1:5173',
+  });
   await waitFor('document.querySelectorAll(".product-card").length === 12');
   await evaluate(
     'Array.from(document.images).forEach(image => { image.loading="eager"; })',
@@ -125,6 +127,15 @@ try {
   results.push(
     '12 products, single h1, RTL, all local images loaded, all inputs labeled',
   );
+  await evaluate('document.fonts.ready');
+  assert.equal(
+    await evaluate('document.fonts.check("400 16px Readex Pro")'),
+    true,
+  );
+  const imagePaths = await evaluate(
+    'Array.from(document.images, image => image.getAttribute("src"))',
+  );
+  assert.equal(new Set(imagePaths).size, 14);
   for (const width of [360, 768, 1280]) {
     await cdp('Emulation.setDeviceMetricsOverride', {
       width,
@@ -132,6 +143,7 @@ try {
       deviceScaleFactor: 1,
       mobile: false,
     });
+    await pause(250);
     assert.equal(
       await evaluate('document.documentElement.scrollWidth<=innerWidth'),
       true,
@@ -145,7 +157,34 @@ try {
       resolve(output, `width-${width}.png`),
       Buffer.from(image.data, 'base64'),
     );
-    results.push(`No horizontal overflow: ${width}px`);
+    const columns = await evaluate(
+      'getComputedStyle(document.querySelector("#products")).gridTemplateColumns.split(" ").length',
+    );
+    assert.equal(columns, width === 360 ? 2 : width === 768 ? 3 : 4);
+    await evaluate(
+      'document.querySelector("#catalog").scrollIntoView({behavior:"instant"})',
+    );
+    await pause(250);
+    const catalogImage = await cdp('Page.captureScreenshot', { format: 'png' });
+    await writeFile(
+      resolve(output, `catalog-${width}.png`),
+      Buffer.from(catalogImage.data, 'base64'),
+    );
+    await evaluate(
+      'document.querySelector("#customization").scrollIntoView({behavior:"instant"})',
+    );
+    await pause(250);
+    const customizationImage = await cdp('Page.captureScreenshot', {
+      format: 'png',
+    });
+    await writeFile(
+      resolve(output, `customization-${width}.png`),
+      Buffer.from(customizationImage.data, 'base64'),
+    );
+    await evaluate('scrollTo({top:0,behavior:"instant"})');
+    results.push(
+      `No horizontal overflow: ${width}px; ${columns} product columns`,
+    );
   }
   await evaluate(
     `document.querySelector('#search').value='مبخرة';document.querySelector('#category').value='مباخر';document.querySelector('#occasion').value='رمضان';document.querySelector('#sort').value='desc';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,

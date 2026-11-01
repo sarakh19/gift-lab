@@ -14,6 +14,10 @@ export const occasions = [
 export const products = [
   {
     id: 'p1',
+    image: {
+      src: '/images/incense-ceramic.jpg',
+      alt: 'مبخرة خزفية فيروزية بغطاء معدني على سطح خشبي',
+    },
     name: 'مبخرة لُطف',
     category: 'مباخر',
     occasions: ['زفاف', 'رمضان'],
@@ -25,6 +29,10 @@ export const products = [
   },
   {
     id: 'p2',
+    image: {
+      src: '/images/23784969.jpg',
+      alt: 'صندوق هدية بورق مزهر وشريط وردي على طاولة خشبية',
+    },
     name: 'بوكس لحظة فرح',
     category: 'بوكسات هدايا',
     occasions: ['تخرج', 'العيد'],
@@ -36,6 +44,10 @@ export const products = [
   },
   {
     id: 'p3',
+    image: {
+      src: '/images/10533996.jpg',
+      alt: 'قوارير عطر زجاجية في ضوء الشمس على سطح فاتح',
+    },
     name: 'عطر أثر',
     category: 'عطور',
     occasions: ['زفاف', 'العيد'],
@@ -47,6 +59,10 @@ export const products = [
   },
   {
     id: 'p4',
+    image: {
+      src: '/images/4271696.jpg',
+      alt: 'صندوق هدية صغير فيروزي بشريط أبيض',
+    },
     name: 'توزيعة بداية حلوة',
     category: 'توزيعات',
     occasions: ['مولود'],
@@ -61,6 +77,10 @@ export const products = [
   },
   {
     id: 'p5',
+    image: {
+      src: '/images/40382309.jpg',
+      alt: 'مبخرة ريفية مع تصاعد البخور على خلفية هادئة',
+    },
     name: 'مبخرة دفء',
     category: 'مباخر',
     occasions: ['رمضان', 'يوم التأسيس'],
@@ -72,6 +92,10 @@ export const products = [
   },
   {
     id: 'p6',
+    image: {
+      src: '/images/7826283.jpg',
+      alt: 'صناديق هدايا مغلفة بأشرطة ذهبية',
+    },
     name: 'بوكس فخر',
     category: 'بوكسات هدايا',
     occasions: ['تخرج', 'اليوم الوطني'],
@@ -86,6 +110,10 @@ export const products = [
   },
   {
     id: 'p7',
+    image: {
+      src: '/images/8450250.jpg',
+      alt: 'قارورة عطر مع زهور بيضاء على طاولة فاتحة',
+    },
     name: 'عطر نسمة',
     category: 'عطور',
     occasions: ['يوم المعلم', 'العيد'],
@@ -97,6 +125,10 @@ export const products = [
   },
   {
     id: 'p8',
+    image: {
+      src: '/images/17575750.jpg',
+      alt: 'علب توزيعات مناسبات صغيرة منسقة مع بطاقات',
+    },
     name: 'توزيعة ليلة فرح',
     category: 'توزيعات',
     occasions: ['زفاف'],
@@ -111,6 +143,10 @@ export const products = [
   },
   {
     id: 'p9',
+    image: {
+      src: '/images/747782.jpg',
+      alt: 'هدية مع دمية دب وردية وصندوق مزين بشريط',
+    },
     name: 'بوكس أهلًا صغيرنا',
     category: 'بوكسات هدايا',
     occasions: ['مولود'],
@@ -122,6 +158,10 @@ export const products = [
   },
   {
     id: 'p10',
+    image: {
+      src: '/images/7460112.jpg',
+      alt: 'علبة هدية مزهرة بتفاصيل وشريط وردي',
+    },
     name: 'توزيعة امتنان',
     category: 'توزيعات',
     occasions: ['يوم المعلم'],
@@ -133,6 +173,10 @@ export const products = [
   },
   {
     id: 'p11',
+    image: {
+      src: '/images/40403077.jpg',
+      alt: 'مبخرة نحاسية مع ضوء شمعة على خلفية طبيعية',
+    },
     name: 'مبخرة دار',
     category: 'مباخر',
     occasions: ['اليوم الوطني', 'يوم التأسيس'],
@@ -144,6 +188,10 @@ export const products = [
   },
   {
     id: 'p12',
+    image: {
+      src: '/images/10278973.jpg',
+      alt: 'صندوق هدية بشريط بني على أقمشة ناعمة',
+    },
     name: 'بوكس هلال',
     category: 'بوكسات هدايا',
     occasions: ['رمضان', 'العيد'],
@@ -154,3 +202,15 @@ export const products = [
     options: { الشريط: ['زيتي', 'عاجي'], البطاقة: ['رمضان كريم', 'عيد مبارك'] },
   },
 ];
+
+// Temporary stock photography, not approved Gift Lab product imagery.
+export const homeImages = {
+  hero: {
+    src: '/images/9628007.jpg',
+    alt: 'هدية مغلفة بشريط قماشي فاتح تقدمها يدان على خلفية محايدة',
+  },
+  customization: {
+    src: '/images/5486842.jpg',
+    alt: 'تنسيق شريط قماشي على صندوق هدية أخضر باليد',
+  },
+};
