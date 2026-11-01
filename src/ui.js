@@ -18,7 +18,7 @@ const optionHTML = (values) =>
     )
     .join('');
 const art = (product) =>
-  `<div class="product-art"><img src="${escapeHTML(product.image.src)}" alt="${escapeHTML(product.image.alt)} — صورة مؤقتة" loading="lazy" decoding="async" width="800" height="880" /></div>`;
+  `<div class="product-art"><img src="${escapeHTML(product.image.src)}" alt="${escapeHTML(product.image.alt)}" loading="lazy" decoding="async" width="800" height="880" /></div>`;
 
 // Native selects remain the form-data source and fallback; enhanced popups avoid OS colors.
 function createPickers() {
@@ -214,7 +214,7 @@ export function initUI(store) {
     ['customization', 'customization-image'],
   ]) {
     get(id).src = homeImages[key].src;
-    get(id).alt = homeImages[key].alt + ' — صورة فوتوغرافية مؤقتة';
+    get(id).alt = homeImages[key].alt;
   }
   let selectedProduct;
   let toastTimer;
@@ -258,12 +258,12 @@ export function initUI(store) {
       })
       .join('');
     get('results-count').textContent =
-      `${visible.length} هدية · جميع الأسعار تجريبية بالريال السعودي`;
+      `${visible.length} هدية · الأسعار بالريال السعودي`;
     get('products').innerHTML = visible.length
       ? visible
           .map(
             (product) =>
-              `<article class="product-card">${art(product)}<div class="product-content"><p class="product-category">${product.category} · ${product.occasions.join('، ')}</p><h3>${product.name}</h3><p>${product.description}</p><div class="product-bottom"><div><strong>${money(product.price)}</strong><small>سعر تجريبي</small></div><button class="add-button" data-product="${product.id}" aria-label="تخصيص ${product.name} وإضافته">خصّص وأضف <span aria-hidden="true">+</span></button></div></div></article>`,
+              `<article class="product-card">${art(product)}<div class="product-content"><p class="product-category">${product.category} · ${product.occasions.join('، ')}</p><h3>${product.name}</h3><p>${product.description}</p><div class="product-bottom"><div><strong>${money(product.price)}</strong></div><button class="add-button" data-product="${product.id}" aria-label="تخصيص ${product.name} وإضافته">خصّص وأضف <span aria-hidden="true">+</span></button></div></div></article>`,
           )
           .join('')
       : '<div class="empty"><h3>ما لقينا هدية بهالاختيارات</h3><p>جرّبي كلمة ثانية أو امسحي الفلاتر وشوفي كل الهدايا.</p><button class="quiet" data-reset>عرض كل الهدايا</button></div>';
@@ -335,7 +335,7 @@ export function initUI(store) {
     );
     get('custom-title').textContent = `خصّص ${selectedProduct.name}`;
     get('custom-fields').innerHTML =
-      `<p>${selectedProduct.description}</p><p><strong>${money(selectedProduct.price)}</strong> · سعر تجريبي</p>${Object.entries(
+      `<p>${selectedProduct.description}</p><p><strong>${money(selectedProduct.price)}</strong></p>${Object.entries(
         selectedProduct.options,
       )
         .map(
@@ -366,8 +366,8 @@ export function initUI(store) {
       );
     announce(
       success
-        ? 'تمّت الإضافة، هديتك صارت في السلة التجريبية'
-        : 'وصلت للحد التقني التجريبي: 99 قطعة لكل تخصيص.',
+        ? 'تمّت الإضافة، هديتك صارت في السلة'
+        : 'يمكن إدخال حتى 99 قطعة لكل تخصيص.',
     );
   });
   // A single delegated listener serves all current and future cart rows.
@@ -420,8 +420,7 @@ export function initUI(store) {
   get('account-form').addEventListener('submit', (event) => {
     event.preventDefault();
     event.currentTarget.reset();
-    get('account-status').textContent =
-      'اجتاز النموذج التحقق الأصلي للمتصفح. لم يُنشأ حساب، ولم تُرسل أو تُحفظ أي بيانات.';
+    get('account-status').textContent = 'البيانات مكتملة وصيغتها صحيحة.';
   });
   renderProducts();
   renderCart();

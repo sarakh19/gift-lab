@@ -54,7 +54,7 @@ export const products = [
     price: 120,
     art: 'perfume',
     tone: 'olive',
-    description: 'تصور تجريبي لهدية عطر أنيقة.',
+    description: 'هدية عطر أنيقة.',
     options: { التغليف: ['عاجي', 'رملي'] },
   },
   {
@@ -69,7 +69,7 @@ export const products = [
     price: 18,
     art: 'gift',
     tone: 'blue',
-    description: 'قطعة تجريبية للاحتفاء بالبدايات.',
+    description: 'لمسة للاحتفاء بالبدايات.',
     options: {
       اللون: ['سماوي', 'وردي', 'عاجي'],
       البطاقة: ['أهلًا بالصغير', 'أهلًا بالصغيرة'],
@@ -120,7 +120,7 @@ export const products = [
     price: 110,
     art: 'perfume',
     tone: 'rose',
-    description: 'اختيار تجريبي للتعبير عن الامتنان.',
+    description: 'اختيار للتعبير عن الامتنان.',
     options: { التغليف: ['وردي', 'عاجي'] },
   },
   {
@@ -153,7 +153,7 @@ export const products = [
     price: 145,
     art: 'gift',
     tone: 'blue',
-    description: 'هدية تجريبية للبدايات الجميلة.',
+    description: 'هدية للبدايات الجميلة.',
     options: { اللون: ['سماوي', 'وردي'], التغليف: ['قماش', 'صندوق'] },
   },
   {
@@ -198,7 +198,7 @@ export const products = [
     price: 175,
     art: 'gift',
     tone: 'olive',
-    description: 'تنسيق موسمي تجريبي للمشاركة.',
+    description: 'تنسيق موسمي للمشاركة.',
     options: { الشريط: ['زيتي', 'عاجي'], البطاقة: ['رمضان كريم', 'عيد مبارك'] },
   },
 ];

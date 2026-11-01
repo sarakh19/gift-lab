@@ -405,7 +405,7 @@ try {
   );
   assert.equal(
     await evaluate(
-      'document.querySelector("#account-status").textContent.includes("لم يُنشأ حساب")',
+      'document.querySelector("#account-status").textContent.includes("البيانات مكتملة وصيغتها صحيحة")',
     ),
     true,
   );

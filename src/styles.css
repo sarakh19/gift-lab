@@ -113,13 +113,6 @@ p {
   width: min(100% - 2rem, 1240px);
   margin-inline: auto;
 }
-.demo-strip {
-  text-align: center;
-  background: #eee6da;
-  color: var(--muted);
-  font-size: 0.68rem;
-  padding: 0.3rem 0.7rem;
-}
 .site-header {
   display: flex;
   flex-wrap: wrap;
@@ -297,12 +290,6 @@ p {
 .catalog {
   padding-block: 1.5rem 3rem;
   border-top: 1px solid var(--line);
-}
-.demo-label {
-  font-size: 0.65rem;
-  color: var(--accent);
-  padding: 0.25rem 0;
-  white-space: nowrap;
 }
 .filters {
   display: grid;

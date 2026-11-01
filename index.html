@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Gift Lab — واجهة تعليمية لاستكشاف الهدايا وتخصيصها. جميع المنتجات والأسعار تجريبية."
+      content="Gift Lab — هدايا وتوزيعات للمناسبات، بتفاصيل على ذوقك."
     />
     <title>جيفت لاب | هدية تُشبه شعورك</title>
   </head>
   <body>
     <a class="skip-link" href="#catalog">انتقل إلى المنتجات</a>
-    <div class="demo-strip">
-      نسخة تعليمية · الصور والأسعار والخيارات مؤقتة وغير معتمدة
-    </div>
     <header class="site-header wrap">
       <a
         class="brand"
@@ -98,7 +95,6 @@
             <p class="eyebrow">اختيارات جيفت لاب</p>
             <h2 id="catalog-title">تفاصيل تفرّح الخاطر</h2>
           </div>
-          <span class="demo-label">كتالوج تجريبي</span>
         </div>
         <form
           id="filters"
@@ -175,7 +171,7 @@
           <a class="text-link" href="#catalog"
             >اختاري هديتك وخلّي الباقي لذوقك
             <span aria-hidden="true">←</span></a
-          ><small>خيارات تخصيص تجريبية تختلف حسب المنتج.</small>
+          >
         </div>
       </section>
       <section id="about" class="about wrap">
@@ -183,9 +179,8 @@
           <p class="eyebrow">وراء كل هدية، اهتمام</p>
           <h2>من عندنا في الدمام… للغاليين على قلبك</h2>
           <p>
-            جيفت لاب متجر هدايا في الدمام، يهتم بتنسيق الهدايا وتفاصيلها. هذه
-            الواجهة التعليمية تتيح استكشاف أمثلة للمنتجات والتخصيص؛ تفاصيل الطلب
-            والدفع والاستلام بانتظار الاعتماد.
+            جيفت لاب متجر هدايا في الدمام، يهتم بتنسيق الهدايا وتفاصيلها، من
+            اختيار الهدية إلى لمسة التغليف.
           </p>
         </div>
       </section>
@@ -193,7 +188,6 @@
     <footer class="wrap">
       <a class="brand" href="#" lang="en" dir="ltr">GIFT LAB ✧</a>
       <p>للغلا، تفاصيل تستاهله.</p>
-      <small>عرض تعليمي — لا يستقبل طلبات أو مدفوعات فعلية.</small>
     </footer>
     <dialog id="custom-dialog" aria-labelledby="custom-title">
       <div class="dialog-top">
@@ -209,7 +203,6 @@
       </div>
       <form id="custom-form">
         <div id="custom-fields"></div>
-        <p class="muted">خيارات تجريبية؛ لا تمثل توفرًا أو تكلفة معتمدة.</p>
         <button class="button" type="submit">أضف إلى السلة</button>
       </form>
     </dialog>
@@ -220,21 +213,15 @@
           ×
         </button>
       </div>
-      <p class="muted">
-        سلة تجريبية، لا يتم إرسال طلب. الأسعار لا تمثل عرضًا تجاريًا معتمدًا.
-      </p>
       <div id="storage-status" role="status"></div>
       <div id="cart-items"></div>
       <div class="cart-total">
-        <span>الإجمالي التجريبي</span><strong id="cart-total"></strong>
+        <span>الإجمالي</span><strong id="cart-total"></strong>
       </div>
-      <p class="muted">
-        الدفع والضرائب والشحن والحد الأدنى للكميات لم تُعتمد بعد.
-      </p>
     </dialog>
     <dialog id="account-dialog" aria-labelledby="account-title">
       <div class="dialog-top">
-        <h2 id="account-title">تجربة نموذج الحساب</h2>
+        <h2 id="account-title">بيانات الحساب</h2>
         <button
           type="button"
           data-close
@@ -244,12 +231,9 @@
           ×
         </button>
       </div>
-      <p id="account-help">
-        نموذج تعليمي فقط؛ لا يُنشئ حسابًا ولا يرسل أو يحفظ بياناتك. استخدم
-        بيانات وهمية وكلمة مرور تجريبية.
-      </p>
+      <p id="account-help">أكملي الحقول التالية للتحقق من صحة البيانات.</p>
       <form id="account-form" aria-describedby="account-help">
-        <label for="full-name">الاسم التجريبي</label
+        <label for="full-name">الاسم</label
         ><input
           id="full-name"
           name="fullName"
@@ -257,14 +241,14 @@
           required
           minlength="2"
           maxlength="80"
-        /><label for="email">البريد الإلكتروني التجريبي</label
+        /><label for="email">البريد الإلكتروني</label
         ><input
           id="email"
           name="email"
           type="email"
           autocomplete="off"
           required
-        /><label for="password">كلمة مرور تجريبية (8 أحرف على الأقل)</label
+        /><label for="password">كلمة المرور (8 أحرف على الأقل)</label
         ><input
           id="password"
           name="password"
@@ -273,7 +257,7 @@
           required
           minlength="8"
           maxlength="128"
-        /><button class="button" type="submit">تحقق من النموذج</button>
+        /><button class="button" type="submit">تحقق من البيانات</button>
         <p id="account-status" role="status"></p>
       </form>
     </dialog>
