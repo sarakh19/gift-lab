@@ -156,6 +156,26 @@ try {
     ),
     true,
   );
+  assert.equal(
+    await evaluate('getComputedStyle(document.body).backgroundColor'),
+    'rgb(235, 218, 221)',
+  );
+  assert.equal(
+    await evaluate(
+      'getComputedStyle(document.querySelector(".product-art")).backgroundColor',
+    ),
+    'rgb(250, 248, 244)',
+  );
+  assert.equal(
+    await evaluate('getComputedStyle(document.querySelector(".button")).color'),
+    'rgb(255, 255, 255)',
+  );
+  assert.equal(
+    await evaluate(
+      'getComputedStyle(document.querySelector(".button")).backgroundColor',
+    ),
+    'rgb(152, 82, 102)',
+  );
   const imagePaths = await evaluate(
     'Array.from(document.images, image => image.getAttribute("src"))',
   );
@@ -260,7 +280,7 @@ try {
   );
   assert.equal(
     await evaluate('getComputedStyle(document.activeElement).outlineColor'),
-    'rgb(152, 84, 62)',
+    'rgb(152, 82, 102)',
   );
   await press('Escape', 'Escape', 27);
   assert.equal(
@@ -290,16 +310,16 @@ try {
     await evaluate(
       'getComputedStyle(document.querySelector("#search")).caretColor',
     ),
-    'rgb(152, 84, 62)',
+    'rgb(152, 82, 102)',
   );
   assert.equal(
     await evaluate(
       'getComputedStyle(document.querySelector("#search")).outlineColor',
     ),
-    'rgb(152, 84, 62)',
+    'rgb(152, 82, 102)',
   );
   results.push(
-    'Custom filter keyboard arrows/Enter/Escape/Tab, selected chips and removal, terracotta focus and caret',
+    'Custom filter keyboard arrows/Enter/Escape/Tab, selected chips and removal, dusty-rose focus and caret',
   );
   await evaluate(
     `document.querySelector('#search').value='مبخرة';document.querySelector('#category').value='مباخر';document.querySelector('#occasion').value='رمضان';document.querySelector('#sort').value='desc';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,

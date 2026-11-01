@@ -59,7 +59,7 @@ At the end of each work day, create or update one file at `docs/day-XX.md` (for 
 Do not create a daily note until that day's work is actually done. Do not overwrite earlier daily notes; append or correct only the relevant day's note.
 
 ## Design reference
-Read and follow `DESIGN.md` before creating or modifying any interface. The approved initial direction is warm off-white with restrained light terracotta accents.
+Read and follow `DESIGN.md` before creating or modifying any interface. The approved current direction is dusty blush with ivory surfaces, off-white product photography and deep dusty-rose actions, as defined in DESIGN.md.
 
 ## Assignment quality requirements
 - Use mobile-first CSS with min-width media queries; do not use max-width queries or !important.

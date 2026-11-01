@@ -21,21 +21,33 @@
 }
 :root {
   font-family: 'Alexandria', Tahoma, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
   color: var(--text);
   background: var(--page);
   color-scheme: light;
   font-synthesis: none;
   line-height: 1.85;
-  accent-color: #a85f49;
-  --page: #faf8f4;
-  --surface: #fffcf8;
-  --text: #49372d;
-  --muted: #735f50;
-  --accent: #98543e;
-  --accent-light: #c9846b;
-  --line: #e5d9cb;
-  --cream: #f1e8dc;
-  --focus: #98543e;
+  accent-color: var(--accent);
+  --page: #ebdadd;
+  --photo: #faf8f4;
+  --surface: #fffdf9;
+  --secondary: #f5ebed;
+  --accent: #985266;
+  --accent-hover: #7d4053;
+  --text: #352a30;
+  --muted: #6c535d;
+  --line: #d8bbc3;
+  --on-accent: #ffffff;
+  --cream: var(--secondary);
+  --accent-light: var(--accent);
+  --focus: var(--accent);
+  --link: var(--accent-hover);
+  --focus-halo: color-mix(in srgb, var(--accent) 16%, transparent);
+  --shadow: color-mix(in srgb, var(--text) 8%, transparent);
+  --backdrop: color-mix(in srgb, var(--text) 45%, transparent);
+  --page-fade: color-mix(in srgb, var(--page) 70%, transparent);
+  --page-wash: color-mix(in srgb, var(--page) 94%, transparent);
 }
 * {
   box-sizing: border-box;
@@ -143,7 +155,7 @@ p {
 }
 .brand-mark {
   font-size: 1.4rem;
-  color: #a98160;
+  color: var(--accent);
   line-height: 1;
 }
 .site-header nav {
@@ -203,7 +215,7 @@ p {
 .eyebrow {
   font-size: 0.75rem;
   color: var(--accent);
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
   margin-bottom: 0.55rem;
 }
 .hero h1 {
@@ -225,7 +237,7 @@ p {
   justify-content: space-between;
   gap: 1.5rem;
   background: var(--accent-light);
-  color: #38271e;
+  color: var(--text);
   border-radius: 5px;
   padding: 0.8rem 1.2rem;
   margin-top: 0;
@@ -259,7 +271,7 @@ p {
 .section-heading > a {
   font-size: 0.8rem;
   color: var(--accent);
-  border-bottom: 1px solid #c6ac96;
+  border-bottom: 1px solid var(--line);
   padding-bottom: 0.2rem;
 }
 .occasions {
@@ -298,7 +310,7 @@ p {
   padding: 1rem;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #f6f0e8;
+  background: var(--secondary);
 }
 .filters .search-field {
   grid-column: 1/-1;
@@ -312,9 +324,9 @@ input,
 select {
   width: 100%;
   min-width: 0;
-  background: #fffcf8;
+  background: var(--surface);
   color: var(--text);
-  border: 1px solid #b9a795;
+  border: 1px solid var(--line);
   border-radius: 6px;
   padding: 0.5rem 0.65rem;
 }
@@ -339,7 +351,7 @@ select {
 }
 .product-art {
   position: relative;
-  background: #f1ece4;
+  background: var(--photo);
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 5px;
@@ -439,11 +451,11 @@ dialog {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 1.4rem;
-  background: #faf8f4;
+  background: var(--photo);
   color: var(--text);
 }
 dialog::backdrop {
-  background: #35261c80;
+  background: var(--backdrop);
   backdrop-filter: blur(3px);
 }
 .dialog-top {
@@ -525,7 +537,7 @@ dialog .button {
   width: fit-content;
   max-width: calc(100% - 2rem);
   background: var(--text);
-  color: white;
+  color: var(--on-accent);
   border-radius: 8px;
   padding: 1rem;
   z-index: 5;
@@ -538,7 +550,7 @@ dialog .button {
   position: absolute;
   top: -100px;
   inset-inline-start: 1rem;
-  background: #fff;
+  background: var(--on-accent);
   padding: 1rem;
   z-index: 10;
 }
@@ -552,7 +564,7 @@ dialog .button {
 
 .customization {
   display: grid;
-  background: #eee5d8;
+  background: var(--secondary);
   margin-bottom: 2.5rem;
   overflow: hidden;
 }
@@ -593,7 +605,7 @@ dialog .button {
   color: var(--muted);
 }
 .customization-details li {
-  border-bottom: 1px solid #c6b29b;
+  border-bottom: 1px solid var(--line);
   padding-bottom: 0.25rem;
 }
 .text-link {
@@ -603,7 +615,7 @@ dialog .button {
   min-height: 44px;
   font-size: 0.9rem;
   color: var(--accent);
-  border-bottom: 1px solid #bba38b;
+  border-bottom: 1px solid var(--line);
 }
 .customization-copy small {
   display: block;
@@ -619,10 +631,10 @@ dialog .button {
   z-index: -1;
   background: linear-gradient(
     180deg,
-    #f4ece0 0%,
-    #f4ece0f5 35%,
-    #f4ece088 64%,
-    #e9ddd000 85%
+    var(--page) 0%,
+    var(--page-wash) 35%,
+    var(--page-fade) 64%,
+    transparent 85%
   );
 }
 .hero-content {
@@ -644,7 +656,7 @@ dialog .button {
   align-items: center;
   min-height: 44px;
   font-size: 0.8rem;
-  border-bottom: 1px solid #ad8c70;
+  border-bottom: 1px solid var(--line);
 }
 .hero-bottom {
   display: flex;
@@ -653,13 +665,13 @@ dialog .button {
   gap: 0.8rem;
   padding-block: 1rem;
   font-size: 0.78rem;
-  color: #503c2e;
+  color: var(--text);
 }
 .hero-bottom span {
   max-width: 200px;
 }
 .hero-bottom a {
-  background: #faf8f4ed;
+  background: var(--page-wash);
   padding: 0.3rem 0.6rem;
 }
 .desktop-break {
@@ -668,11 +680,11 @@ dialog .button {
 input,
 select {
   font-size: 0.9rem;
-  border-color: #ccbca9;
+  border-color: var(--line);
   border-radius: 0;
 }
 .button:hover {
-  background: #7e4433;
+  background: var(--accent-hover);
 }
 .add-button:hover {
   border-color: var(--accent);
@@ -729,10 +741,10 @@ select {
   .hero::after {
     background: linear-gradient(
       270deg,
-      #f3ebdf 0%,
-      #f3ebdff0 24%,
-      #f3ebdfc2 38%,
-      #f3ebdf00 65%
+      var(--page) 0%,
+      var(--page-wash) 24%,
+      var(--page-fade) 38%,
+      transparent 65%
     );
   }
   .hero-copy > p:not(.eyebrow) {
@@ -834,10 +846,10 @@ select {
   .hero::after {
     background: linear-gradient(
       270deg,
-      #f3ebdf 0%,
-      #f3ebdff0 23%,
-      #f3ebdfb0 40%,
-      #f3ebdf00 66%
+      var(--page) 0%,
+      var(--page-wash) 23%,
+      var(--page-fade) 40%,
+      transparent 66%
     );
   }
   .hero-bottom {
@@ -910,7 +922,7 @@ a:active {
 }
 ::selection {
   color: var(--text);
-  background: #e6d4c1;
+  background: var(--secondary);
 }
 :focus-visible {
   outline: 2px solid var(--focus);
@@ -920,14 +932,14 @@ input,
 select {
   color: var(--text);
   background: var(--surface);
-  border: 1px solid #c5b39f;
+  border: 1px solid var(--line);
   border-radius: 5px;
   padding: 0.65rem 0.75rem;
   caret-color: var(--accent);
   font-size: 0.85rem;
 }
 input::placeholder {
-  color: #816c5b;
+  color: var(--muted);
   opacity: 1;
 }
 input:focus,
@@ -935,7 +947,7 @@ select:focus {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px #c9846b20;
+  box-shadow: 0 0 0 4px var(--focus-halo);
   background: var(--surface);
 }
 input:user-invalid {
@@ -963,7 +975,8 @@ input[type='search']::-webkit-search-cancel-button {
   width: 16px;
   height: 16px;
   cursor: pointer;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 4 8 8m0-8-8 8' fill='none' stroke='%2398543e' stroke-width='1.7'/%3E%3C/svg%3E")
+  background: var(--accent);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 4 8 8m0-8-8 8' fill='none' stroke='white' stroke-width='1.7'/%3E%3C/svg%3E")
     center/contain no-repeat;
 }
 button,
@@ -978,14 +991,14 @@ input,
 }
 .button:hover,
 .button:focus-visible {
-  color: #38271e;
-  background: #d69b83;
+  color: var(--text);
+  background: var(--accent-hover);
 }
 .quiet:hover,
 .cart-button:hover,
 .add-button:hover {
   color: var(--accent);
-  background: #eadbcb;
+  background: var(--secondary);
 }
 .cart-button span {
   color: var(--text);
@@ -1011,7 +1024,7 @@ input,
   line-height: 1.65;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid #c5b39f;
+  border: 1px solid var(--line);
   border-radius: 5px;
 }
 .select-trigger > span:first-child {
@@ -1025,7 +1038,7 @@ input,
 }
 .select-trigger[aria-expanded='true'] {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px #c9846b20;
+  box-shadow: 0 0 0 3px var(--focus-halo);
 }
 .select-trigger[aria-expanded='true'] .select-chevron {
   transform: rotate(180deg);
@@ -1041,10 +1054,10 @@ input,
   padding: 0.3rem;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid #c5b39f;
+  border: 1px solid var(--line);
   border-radius: 6px;
-  box-shadow: 0 6px 18px #49372d14;
-  scrollbar-color: #c9a28a var(--cream);
+  box-shadow: 0 6px 18px var(--shadow);
+  scrollbar-color: var(--line) var(--cream);
   scrollbar-width: thin;
 }
 .select-menu[hidden] {
@@ -1066,7 +1079,7 @@ input,
 .select-menu [role='option']:hover,
 .select-menu [role='option']:focus {
   color: var(--accent);
-  background: #f1e8dc;
+  background: var(--secondary);
   outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
@@ -1078,7 +1091,7 @@ input,
 .is-active .select-trigger,
 input.is-active {
   border-color: var(--accent);
-  background: #fbf3ec;
+  background: var(--secondary);
 }
 dialog .select-menu {
   position: static;
@@ -1101,7 +1114,7 @@ dialog .select-menu {
   padding: 0.4rem 0.7rem;
   color: var(--accent);
   background: var(--cream);
-  border: 1px solid #d3b49f;
+  border: 1px solid var(--line);
   border-radius: 24px;
   font-size: 0.72rem;
   overflow-wrap: anywhere;
@@ -1111,7 +1124,7 @@ dialog .select-menu {
   font-size: 1rem;
 }
 .filter-chip:hover {
-  background: #eadbcb;
+  background: var(--secondary);
 }
 .results {
   font-size: 0.72rem;
@@ -1119,16 +1132,16 @@ dialog .select-menu {
 .toast {
   color: var(--text);
   background: var(--cream);
-  border: 1px solid #c9a28a;
+  border: 1px solid var(--line);
   border-radius: 7px;
-  box-shadow: 0 4px 18px #49372d10;
+  box-shadow: 0 4px 18px var(--shadow);
 }
 .toast:not(:empty),
 dialog[open] {
   animation: surface-in 160ms ease-out;
 }
 dialog::backdrop {
-  background: #49372d70;
+  background: var(--backdrop);
 }
 @keyframes surface-in {
   from {
@@ -1195,13 +1208,13 @@ dialog::backdrop {
 
 /* Store photography: keep the complete arrangement and original fabric colors. */
 .product-art {
-  background: #faf8f4;
+  background: var(--photo);
 }
 .product-art img {
   object-fit: contain;
 }
 .hero {
-  background: #faf8f4;
+  background: var(--photo);
   min-height: 750px;
 }
 .hero-art img {
@@ -1209,16 +1222,21 @@ dialog::backdrop {
   object-position: center bottom;
 }
 .hero::after {
-  background: linear-gradient(180deg, #faf8f4 0%, #faf8f4 40%, #faf8f400 62%);
+  background: linear-gradient(
+    180deg,
+    var(--page) 0%,
+    var(--page) 40%,
+    transparent 62%
+  );
 }
 .hero-bottom {
-  background: #faf8f4e6;
+  background: var(--page-wash);
 }
 .customization {
-  background: #f6f0e8;
+  background: var(--secondary);
 }
 .customization-photo {
-  background: #faf8f4;
+  background: var(--photo);
 }
 .customization-photo img {
   height: 340px;
@@ -1265,7 +1283,12 @@ dialog::backdrop {
     object-position: left center;
   }
   .hero::after {
-    background: linear-gradient(270deg, #faf8f4 0%, #faf8f4 38%, #faf8f400 65%);
+    background: linear-gradient(
+      270deg,
+      var(--page) 0%,
+      var(--page) 38%,
+      transparent 65%
+    );
   }
   .customization-photo img {
     height: 410px;
@@ -1282,7 +1305,12 @@ dialog::backdrop {
     min-height: 560px;
   }
   .hero::after {
-    background: linear-gradient(270deg, #faf8f4 0%, #faf8f4 40%, #faf8f400 60%);
+    background: linear-gradient(
+      270deg,
+      var(--page) 0%,
+      var(--page) 40%,
+      transparent 60%
+    );
   }
   .hero-art img {
     object-position: left center;
@@ -1293,4 +1321,188 @@ dialog::backdrop {
   .arrangement-gallery {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
+}
+
+/* The approved pink palette applies to every component and interaction state. */
+body {
+  background: var(--page);
+  color: var(--text);
+}
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+h2 {
+  font-size: 1.5rem;
+}
+.site-header nav {
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+}
+.site-header nav a,
+.site-header nav a:visited {
+  color: var(--text);
+  font-weight: 500;
+}
+.hero {
+  background: var(--page);
+}
+.hero h1 {
+  font-size: 2.125rem;
+  font-weight: 600;
+}
+.hero h1 em {
+  color: var(--accent);
+}
+.hero-bottom {
+  background: var(--page-wash);
+  color: var(--text);
+}
+main a:not(.button) {
+  color: var(--accent);
+}
+.button,
+.button:link,
+.button:visited,
+.add-button {
+  color: var(--on-accent);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  font-weight: 500;
+}
+.button:hover,
+.button:focus-visible,
+.button:active,
+.add-button:hover,
+.add-button:focus-visible,
+.add-button:active {
+  color: var(--on-accent);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.quiet {
+  color: var(--accent);
+}
+.quiet:hover,
+.cart-button:hover,
+.filter-chip:hover {
+  color: var(--accent-hover);
+  background: var(--secondary);
+}
+.filters,
+dialog,
+.select-menu {
+  background: var(--surface);
+}
+input,
+.select-trigger {
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--text);
+}
+input:focus,
+.select-trigger[aria-expanded='true'] {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.select-menu [aria-selected='true'],
+.select-menu [role='option']:hover,
+.select-menu [role='option']:focus,
+.is-active .select-trigger,
+input.is-active,
+.filter-chip {
+  color: var(--accent);
+  background: var(--secondary);
+}
+.occasion-card {
+  background: var(--surface);
+}
+.occasion-card[aria-pressed='true'] {
+  color: var(--accent);
+  background: var(--secondary);
+  border-color: var(--accent);
+}
+.product-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.product-art,
+.customization-photo {
+  background: var(--photo);
+}
+.product-art {
+  border-radius: 0;
+}
+.product-content {
+  padding: 0.8rem;
+}
+.product-content h3 {
+  font-weight: 600;
+}
+.customization {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.customization-copy h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.arrangement-showcase {
+  background: var(--secondary);
+}
+.arrangement-showcase h3 {
+  font-weight: 600;
+}
+.arrangement-gallery img {
+  background: var(--photo);
+}
+.toast {
+  color: var(--text);
+  background: var(--secondary);
+}
+dialog::backdrop {
+  background: var(--backdrop);
+}
+@media (min-width: 768px) {
+  .site-header nav {
+    font-size: 0.875rem;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  .section-heading h2,
+  .customization-copy h2 {
+    font-size: 1.75rem;
+  }
+}
+@media (min-width: 1280px) {
+  .site-header nav {
+    font-size: 0.9375rem;
+  }
+  .hero h1 {
+    font-size: 2.75rem;
+  }
+  .section-heading h2,
+  .customization-copy h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Small text on blush uses the approved darker rose for sufficient contrast. */
+.eyebrow,
+.quiet,
+main a:not(.button) {
+  color: var(--link);
+}
+
+button,
+input,
+select {
+  font-weight: 500;
 }

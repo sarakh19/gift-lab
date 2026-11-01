@@ -15,25 +15,34 @@ This is the initial visual direction approved by Sara. Treat color values and la
 - Adapt all content and structure to Gift Lab: gifts, incense burners, perfumes, توزيعات, weddings, newborns, graduations, seasonal occasions, and product customization.
 - Do not copy Floward's branding, text, images, or exact layout. Design for Gift Lab's own products and requirements.
 
-## Initial color palette
-- Main page background: warm off-white `#FAF8F4`.
-- Secondary surfaces: soft cream `#F1E8DC`.
-- Supporting neutral: pale sand `#E6D4C1`, used sparingly.
-- Accent: muted light terracotta `#C9846B`, initially for primary actions and small highlights.
-- Optional deeper terracotta `#A85F49` for text or interaction states only if contrast needs it.
-- Avoid gray as a brand palette color.
-- Keep the palette flexible until it is checked with real product and fabric photos. Do not put terracotta behind large areas of product imagery or use it so heavily that it competes with the products.
-- Generated palette preview: `generated_images/exec-3ea785d7-88e0-4a41-8ba7-b7aff9af01c9.png` (visual concept only; CSS hex values above are the source of truth).
+## Approved color direction — pink
+- Replace the previous terracotta direction completely. Do not reuse the old terracotta palette or its preview as a current reference.
+- Main page background: muted dusty blush `#EBDADD`, slightly deeper than the product-photo background so the photos stand out. Keep it soft and light, never saturated or dark.
+- Product-photo background: warm off-white `#FAF8F4`; preserve the consistent light background already prepared in the product photos.
+- Card and form surfaces: warm ivory `#FFFDF9`.
+- Secondary pink surfaces: pale blush `#F5EBED`.
+- Primary action color: deep dusty rose `#985266`, with white text.
+- Hover/pressed action color: deeper rose `#7D4053`.
+- Main text and header links: deep warm plum `#352A30`.
+- Secondary text: muted plum `#6C535D`.
+- Subtle borders: `#D8BBC3`.
+- Use pink accents consistently on links, active filters, selection states, badges and keyboard focus. Avoid default blue interface accents while retaining clearly visible focus.
+- Gray, orange, terracotta and gold are not interface brand colors. Product photography may naturally contain any of these colors.
+- The approved direction is pink with a slightly deeper page background; these exact hex values are implementation starting points. Check real contrast and the balance beside product photos before finalizing.
+- Define the palette once as shared CSS custom properties and apply it consistently across every page and component.
 
 ## Typography
-- Use an elegant Arabic type style that remains easy to read, especially on mobile.
-- Headings should be prominent and clearly differentiated from body text.
-- Body text, prices, labels, and controls should remain comfortable to scan.
-- Avoid decorative typefaces for long copy or small interface text.
-- Choose exact font families and weights during implementation, then check Arabic shaping, legibility, loading behavior, and contrast.
+- Use Alexandria for all Arabic headings, body text, navigation, buttons, inputs and selects.
+- Body weight: 400; navigation, controls and product names: 500–600; headings: 600–700.
+- Header links must be dark, prominent and readable, using the main text color rather than faint secondary text.
+- Start with 16px body text, 14–16px navigation, 24–32px section headings and a responsive 30–44px hero heading. Adjust for clear reading and balanced layout.
+- Keep headings elegant and compact; avoid oversized hero text and excessively light weights.
+- Do not apply letter-spacing to connected Arabic lettering.
+- Verify the actual Alexandria font loads rather than silently showing only a fallback.
 
 ## Product cards
-- Keep product cards simple and consistent, with medium-sized, clear product imagery.
+- Keep product cards compact and consistent, with clear medium-sized product imagery. Use four columns on wide desktop layouts and two on mobile when readable.
+- Use real product photographs; do not substitute cartoon illustrations. Keep the complete product visible with consistent image ratios and object-fit: contain where needed.
 - Use gently rounded corners and restrained borders or shadows; avoid visual effects that distract from the product.
 - Show the product name and price clearly.
 - Add a small status badge only when relevant, such as “الأكثر مبيعًا”, “جاهز”, or “حسب الطلب”.
@@ -60,7 +69,6 @@ Avoid showing every section with equal emphasis. Use spacing and clear headings 
 - Ensure readable contrast and visible keyboard focus states.
 
 ## Design decisions still open
-- Exact typefaces and font weights.
 - Final color values after review with real Gift Lab product photography.
 - Logo and brand assets.
 - Exact hero image, photography direction, image treatments, and icon style.
@@ -68,51 +76,3 @@ Avoid showing every section with equal emphasis. Use spacing and clear headings 
 - Border/shadow strength and detailed responsive breakpoints.
 
 Update this file when Sara makes a design decision. Preserve the calm, cohesive, product-first direction unless she explicitly changes it.
-
-## Visual refinement — 1 November 2026
-
-The user requested a refinement of the existing storefront, preserving its data and working features. This supersedes the earlier illustration-based presentation.
-
-- Use real temporary stock photographs until approved Gift Lab photography is supplied. Product pictures are distinct, stored locally in `public/images/`, and selected through `products[].image` in `src/data.js`. Hero and customization photographs use `homeImages` in the same file. See `docs/image-sources.md` for source/credit records.
-- Current Arabic typeface: locally hosted Readex Pro, weights 400, 500 and 600, with `font-display: swap`. Its SIL Open Font License is included in `public/fonts/OFL.txt`.
-- Keep the original warm off-white and cream palette. Light terracotta `#C9846B` is reserved for the primary action and small details; deeper terracotta is used for readable text/focus. Product photographs supply the varied colors.
-- Compact product cards: two columns on phones, three from 768px, four from 1280px. Uniform image frames use `object-fit: contain` so product photos are not cropped. Cards have no enclosing border or shadow.
-- Reduce the main heading and section headings, avoid large decorative occasion icons, and use simple text occasion buttons with a selected state.
-- Homepage order: storefront header, photographic welcome, occasion discovery, featured/catalog products with the existing filters, photographic customization section, concise store information and footer.
-- Existing sample prices, options, product text, account demonstration and cart behavior remain unchanged. Temporary photographs are not claims about approved Gift Lab products or packaging.
-
-Exact final photography, brand assets and commercial content still require client approval.
-
-## Full-width storefront and Saudi copy — 1 November 2026
-
-This latest direction follows the user's review of the previous design and supersedes the Readex Pro typography and split-panel hero described above.
-
-- The hero photograph fills an edge-to-edge section; text sits on the right in an RTL content container. A warm directional gradient protects text contrast while leaving the gift visible. Mobile uses a taller composition and vertical gradient; desktop uses a horizontal composition. This is a full-width image treatment, not a separate image card.
-- Typography now pairs IBM Plex Sans Arabic (400/500/600) for interface/body copy with Noto Naskh Arabic (400/500) for editorial headings. Both are hosted locally with font-display:swap and their own OFL files in public/fonts. Earlier font assets are retained but not loaded.
-- The desktop wordmark is centered, with navigation to its right and account/cart controls to its left. Use restrained warm brown/terracotta details and off-white/cream surfaces; preserve the two/three/four-column product grid and existing photographs.
-- Primary Saudi wording includes “هدايا تليق بغلاهم”، “وش مناسبتك؟”، “تفاصيل تفرّح الخاطر” and “خلّيها على ذوقك”. Preserve explicit educational/demo messages and avoid inventing commercial promises.
-- The user supplied https://www.tiktok.com/@glab_sa as a visual reference. Automated browsing was blocked and the direct public response contained a protection challenge, not account content. No TikTok videos or products were actually reviewed or copied. Current visual choices rely on the user's instructions and existing client requirements. Matching the shop's actual fabric arrangements and photography still requires accessible reference images from the account.
-
-## Alexandria and interaction consistency — 1 November 2026
-
-The user's latest instruction supersedes the earlier font pair. Use locally hosted Alexandria 400/500/600 throughout, including the wordmark, headings, controls and body. Header links have a darker warm-brown color and weight 500. Keep a smaller, consistent heading scale, square compact product-image frames, and the existing two/three/four-column grid.
-
-Use the warm off-white/cream/light-terracotta palette for all interface states: visited links, focus outlines, caret, selection, active filters, dropdown selection, hover, search clear button and autofill. Light terracotta buttons use dark text for readability. Do not rely on the OS native dropdown's blue selection styling: progressively enhance the existing select elements into labeled, keyboard-operated listbox popups in ui.js. Preserve the native selects as the form-data source and fallback.
-
-Selected filters appear as individually removable chips; clearing a chip restores focus to its control. Keep results updates immediate and announced by the existing status region. Product data and cart rules are unchanged; the p11 photo was replaced with a real incense photograph because the previous photograph featured a candle.
-
-Motion is supplementary: CSS handles short hover, menu, dialog and toast transitions; ui.js uses IntersectionObserver for a one-time 240ms entrance of section headings and selected sections, plus Web Animations for 140ms result feedback and 200ms cart-count feedback. Content starts visible and remains usable without animation. Respect prefers-reduced-motion both in CSS and JavaScript; cancel active scripted animations when the preference changes and avoid smooth scripted scrolling in that mode.
-
-## Presentation copy cleanup — 1 November 2026
-
-At the user's explicit request, remove educational/demo/temporary wording and related notices from the rendered presentation, including the top strip, product badges/descriptions/prices, cart, customization, footer, image alt suffixes and account form. This overrides prior instructions to show those notices in the interface; retain factual implementation/data limitations in project documentation. No prices, stock, policies, backend integration or production approval were added. The account action remains validation-only, with neutral feedback that the fields are complete and correctly formatted; it does not claim account creation.
-
-## User-supplied shop imagery — 1 November 2026
-
-Replace every displayed stock photograph with the twenty images attached by the user. Preserve original PNGs in Downloads and produce local JPEG delivery copies at the original dimensions, quality 92; do not recolor fabrics, alter product details, or crop product-card photographs. Select images by their visible subject rather than their occasionally inaccurate source filenames.
-
-- Twelve distinct photographs map to the existing twelve product IDs. Keep names, prices, options, categories and occasions intact.
-- Use the lavender arrangement for the full-width hero and the peach incense collection for customization. Use contain with responsive positioning so square compositions remain complete, with text at the right of the wide hero and above the photograph on mobile.
-- Show the remaining six arrangements in a compact gallery within the existing customization section, not as new catalog products or new commercial offers.
-- All displayed image paths now use /images/store/. File provenance, dimensions and delivery sizes are recorded in docs/store-images.json. Earlier stock files remain preserved but are not referenced by the rendered page.
-- Retain Alexandria, the current palette, accessible filter interactions, reduced-motion support and the user's removal of educational/demo notices from the presentation.
