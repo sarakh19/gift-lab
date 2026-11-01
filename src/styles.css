@@ -1686,7 +1686,7 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 680px;
+  min-height: 590px;
   padding-top: 0;
 }
 .hero-art {
@@ -1702,15 +1702,16 @@ html {
 }
 .hero-art img {
   object-fit: cover;
-  object-position: 40% center;
+  object-position: 46% 72%;
 }
 .hero::after {
   display: block;
   background: linear-gradient(
     180deg,
-    var(--surface) 0%,
-    var(--page-wash) 36%,
-    transparent 78%
+    color-mix(in srgb, var(--surface) 94%, transparent) 0%,
+    color-mix(in srgb, var(--secondary) 83%, transparent) 35%,
+    color-mix(in srgb, var(--secondary) 25%, transparent) 65%,
+    transparent 90%
   );
 }
 .hero-content {
@@ -1718,11 +1719,11 @@ html {
   margin-inline: auto;
 }
 .hero-copy {
-  padding-block: 2rem 1rem;
+  padding-block: 1.5rem 0.75rem;
   max-width: 480px;
 }
 .hero-bottom {
-  background: var(--page-wash);
+  background: transparent;
   border-top: 0;
   margin-top: auto;
 }
@@ -1753,7 +1754,7 @@ html {
 }
 @media (min-width: 768px) {
   .hero {
-    min-height: 570px;
+    min-height: 500px;
     padding-top: 0;
   }
   .hero-content {
@@ -1770,14 +1771,15 @@ html {
     margin: 0;
   }
   .hero-art img {
-    object-position: center 58%;
+    object-position: center 68%;
   }
   .hero::after {
     background: linear-gradient(
       270deg,
-      var(--surface) 0%,
-      var(--page-wash) 26%,
-      transparent 65%
+      color-mix(in srgb, var(--surface) 94%, transparent) 0%,
+      color-mix(in srgb, var(--secondary) 72%, transparent) 28%,
+      color-mix(in srgb, var(--secondary) 22%, transparent) 48%,
+      transparent 72%
     );
   }
   .occasion-grid {
@@ -1790,16 +1792,63 @@ html {
 }
 @media (min-width: 1280px) {
   .hero {
-    min-height: 600px;
+    min-height: 520px;
   }
   .hero-copy {
     max-width: 450px;
-    padding-top: 4rem;
+    padding-top: 2.5rem;
   }
   .hero-art {
     margin: 0;
   }
   .occasion-card {
     font-size: 0.82rem;
+  }
+}
+
+/* All hero copy belongs to the photograph, without a separate panel. */
+.hero-copy,
+.hero-content,
+.hero-bottom a {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+.hero-copy {
+  text-align: start;
+}
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.45;
+  margin-block: 0.5rem 0.75rem;
+}
+.hero-copy > p:not(.eyebrow) {
+  font-size: 0.85rem;
+  line-height: 1.85;
+}
+.hero-copy .hero-note {
+  font-size: 0.72rem;
+  margin-top: 1rem;
+}
+.hero-actions {
+  margin-top: 0.85rem;
+}
+.hero-bottom {
+  padding-block: 0.75rem;
+}
+@media (min-width: 768px) {
+  .hero h1 {
+    font-size: 38px;
+  }
+  .hero-copy > p:not(.eyebrow) {
+    font-size: 0.92rem;
+  }
+  .hero-copy .hero-note {
+    font-size: 0.75rem;
+  }
+}
+@media (min-width: 1280px) {
+  .hero h1 {
+    font-size: 42px;
   }
 }
