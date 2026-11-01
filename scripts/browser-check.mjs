@@ -1,0 +1,286 @@
+﻿import { spawn } from 'node:child_process';
+import { mkdir, writeFile, rm } from 'node:fs/promises';
+import { resolve, dirname } from 'node:path';
+import assert from 'node:assert/strict';
+
+const output = resolve('test-results');
+const profile = resolve(output, 'chrome-profile');
+assert.equal(dirname(profile), output);
+await mkdir(output, { recursive: true });
+const browser = spawn(
+  'C:/Program Files/Google/Chrome/Application/chrome.exe',
+  [
+    '--headless=new',
+    '--disable-gpu',
+    '--no-first-run',
+    '--no-default-browser-check',
+    '--disable-background-networking',
+    '--disable-component-update',
+    '--disk-cache-size=1',
+    '--media-cache-size=1',
+    '--remote-debugging-port=9223',
+    `--user-data-dir=${profile}`,
+    'about:blank',
+  ],
+  { windowsHide: true, stdio: 'ignore' },
+);
+const keepAlive = setInterval(() => {}, 1000);
+let socket;
+let serial = 0;
+const pending = new Map();
+const errors = [];
+const results = [];
+const pause = (time) => new Promise((done) => setTimeout(done, time));
+try {
+  let pages;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    try {
+      pages = await (await fetch('http://127.0.0.1:9223/json')).json();
+      if (pages.some((page) => page.type === 'page')) break;
+    } catch {
+      /* wait for owned browser */
+    }
+    await pause(200);
+  }
+  assert.ok(pages, 'Chrome endpoint started');
+  socket = new WebSocket(
+    pages.find((page) => page.type === 'page').webSocketDebuggerUrl,
+  );
+  await new Promise((done, reject) => {
+    socket.addEventListener('open', done, { once: true });
+    socket.addEventListener('error', reject, { once: true });
+  });
+  socket.addEventListener('message', ({ data }) => {
+    const message = JSON.parse(data);
+    if (message.id) {
+      const handlers = pending.get(message.id);
+      if (!handlers) return;
+      pending.delete(message.id);
+      if (message.error) handlers.reject(Error(JSON.stringify(message.error)));
+      else handlers.resolve(message.result);
+    } else if (message.method === 'Runtime.exceptionThrown')
+      errors.push(message.params.exceptionDetails.text);
+  });
+  const cdp = (method, params = {}) =>
+    new Promise((done, reject) => {
+      const id = ++serial;
+      const timer = setTimeout(
+        () => reject(Error(`CDP timeout: ${method}`)),
+        15000,
+      );
+      pending.set(id, {
+        resolve: (value) => {
+          clearTimeout(timer);
+          done(value);
+        },
+        reject: (error) => {
+          clearTimeout(timer);
+          reject(error);
+        },
+      });
+      socket.send(JSON.stringify({ id, method, params }));
+    });
+  const evaluate = async (expression) => {
+    const response = await cdp('Runtime.evaluate', {
+      expression,
+      returnByValue: true,
+      awaitPromise: true,
+    });
+    if (response.exceptionDetails)
+      throw Error(JSON.stringify(response.exceptionDetails));
+    return response.result.value;
+  };
+  const waitFor = async (expression) => {
+    for (let attempt = 0; attempt < 80; attempt++) {
+      if (await evaluate(expression)) return;
+      await pause(100);
+    }
+    throw Error(`Timed out: ${expression}`);
+  };
+  const reload = async () => {
+    await evaluate('document.documentElement.dataset.oldDocument="yes"');
+    await cdp('Page.reload');
+    await waitFor(
+      '!document.documentElement.dataset.oldDocument && document.querySelectorAll(".product-card").length === 12',
+    );
+  };
+  await cdp('Runtime.enable');
+  await cdp('Page.enable');
+  await cdp('Page.navigate', { url: 'http://127.0.0.1:5173' });
+  await waitFor('document.querySelectorAll(".product-card").length === 12');
+  await evaluate(
+    'Array.from(document.images).forEach(image => { image.loading="eager"; })',
+  );
+  await waitFor(
+    'Array.from(document.images).every(image => image.complete && image.naturalWidth > 0)',
+  );
+  assert.equal(await evaluate('document.querySelectorAll("h1").length'), 1);
+  assert.equal(await evaluate('document.documentElement.dir'), 'rtl');
+  assert.equal(
+    await evaluate(
+      'Array.from(document.querySelectorAll("input,select")).every(control=>control.labels.length>0)',
+    ),
+    true,
+  );
+  results.push(
+    '12 products, single h1, RTL, all local images loaded, all inputs labeled',
+  );
+  for (const width of [360, 768, 1280]) {
+    await cdp('Emulation.setDeviceMetricsOverride', {
+      width,
+      height: 1000,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    assert.equal(
+      await evaluate('document.documentElement.scrollWidth<=innerWidth'),
+      true,
+      `Overflow at ${width}`,
+    );
+    const image = await cdp('Page.captureScreenshot', {
+      format: 'png',
+      captureBeyondViewport: false,
+    });
+    await writeFile(
+      resolve(output, `width-${width}.png`),
+      Buffer.from(image.data, 'base64'),
+    );
+    results.push(`No horizontal overflow: ${width}px`);
+  }
+  await evaluate(
+    `document.querySelector('#search').value='مبخرة';document.querySelector('#category').value='مباخر';document.querySelector('#occasion').value='رمضان';document.querySelector('#sort').value='desc';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,
+  );
+  assert.deepEqual(
+    await evaluate(
+      'Array.from(document.querySelectorAll(".product-card h3"),item=>item.textContent)',
+    ),
+    ['مبخرة دفء', 'مبخرة لُطف'],
+  );
+  await evaluate(
+    `document.querySelector('#search').value='لا يوجد';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,
+  );
+  assert.equal(
+    await evaluate('document.querySelectorAll(".product-card").length'),
+    0,
+  );
+  await evaluate('document.querySelector("[data-reset]").click()');
+  await waitFor('document.querySelectorAll(".product-card").length===12');
+  results.push('Combined filters and sorting, empty results and reset');
+  await evaluate('localStorage.clear()');
+  await reload();
+  const add = async (color = 'رملي') =>
+    evaluate(
+      `document.querySelector('[data-product="p1"]').click();document.querySelector('#custom-0').value=${JSON.stringify(color)};document.querySelector('#custom-form').requestSubmit();`,
+    );
+  await add();
+  await add();
+  await add('عاجي');
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '3',
+  );
+  assert.equal(
+    await evaluate('document.querySelectorAll(".cart-row").length'),
+    2,
+  );
+  await reload();
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '3',
+  );
+  await evaluate(
+    'document.querySelector("#cart-open").click();document.querySelector("[data-action=increase]").click()',
+  );
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '4',
+  );
+  await evaluate('document.querySelector("[data-action=decrease]").click()');
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '3',
+  );
+  await evaluate(
+    'document.querySelector("#quantity-0").value="4";document.querySelector("#quantity-0").dispatchEvent(new Event("change",{bubbles:true}))',
+  );
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '5',
+  );
+  await evaluate('document.querySelector("[data-action=remove]").click()');
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '1',
+  );
+  assert.equal(
+    await evaluate('document.querySelector("#cart-total").textContent'),
+    await evaluate('new Intl.NumberFormat("ar-SA").format(85)+" ر.س"'),
+  );
+  results.push(
+    'Cart variant merge/separation, persistence, quantity controls, removal and total',
+  );
+  await cdp('Input.dispatchKeyEvent', {
+    type: 'keyDown',
+    key: 'Escape',
+    code: 'Escape',
+    windowsVirtualKeyCode: 27,
+  });
+  await cdp('Input.dispatchKeyEvent', {
+    type: 'keyUp',
+    key: 'Escape',
+    code: 'Escape',
+    windowsVirtualKeyCode: 27,
+  });
+  await waitFor('!document.querySelector("#cart-dialog").open');
+  await waitFor('document.activeElement.id === "cart-open"');
+  await evaluate('document.querySelector("#account-open").click()');
+  assert.equal(
+    await evaluate('document.querySelector("#account-form").checkValidity()'),
+    false,
+  );
+  await evaluate(
+    'document.querySelector("#full-name").value="تجربة";document.querySelector("#email").value="bad";document.querySelector("#password").value="sample-only"',
+  );
+  assert.equal(
+    await evaluate('document.querySelector("#email").validity.typeMismatch'),
+    true,
+  );
+  await evaluate(
+    'document.querySelector("#email").value="demo@example.com";document.querySelector("#account-form").requestSubmit()',
+  );
+  assert.equal(await evaluate('document.querySelector("#password").value'), '');
+  assert.equal(
+    await evaluate('JSON.stringify(localStorage).includes("sample-only")'),
+    false,
+  );
+  assert.equal(
+    await evaluate(
+      'document.querySelector("#account-status").textContent.includes("لم يُنشأ حساب")',
+    ),
+    true,
+  );
+  results.push(
+    'Native required/email validation; password cleared and not stored; demo message; Escape restores focus',
+  );
+  await evaluate(
+    'document.querySelector("#account-dialog").close();localStorage.setItem("giftlab.cart.v1","{broken")',
+  );
+  await reload();
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '0',
+  );
+  results.push('Corrupt localStorage recovers; no uncaught JavaScript errors');
+  assert.deepEqual(errors, []);
+  await writeFile(
+    resolve(output, 'browser-check.json'),
+    JSON.stringify({ results, errors }, null, 2),
+  );
+  console.log(results.join('\n'));
+} finally {
+  clearInterval(keepAlive);
+  socket?.close();
+  browser.kill();
+  await pause(800);
+  await rm(profile, { recursive: true, force: true }).catch(() => {});
+}

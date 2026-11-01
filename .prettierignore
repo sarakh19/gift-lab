@@ -1,0 +1,6 @@
+node_modules
+dist
+package-lock.json
+AGENTS.md
+DESIGN.md
+docs/client-requirements.md

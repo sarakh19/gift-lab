@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Gift Lab — واجهة تعليمية لاستكشاف الهدايا وتخصيصها. جميع المنتجات والأسعار تجريبية."
+    />
+    <title>جيفت لاب | هدية تُشبه شعورك</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#catalog">انتقل إلى المنتجات</a>
+    <div class="demo-strip">
+      نسخة تعليمية · المنتجات والأسعار والخيارات للتجربة فقط
+    </div>
+    <header class="site-header wrap">
+      <a class="brand" href="#" aria-label="جيفت لاب، الرئيسية"
+        ><span class="brand-mark" aria-hidden="true">✧</span
+        ><span
+          ><b lang="en" dir="ltr">GIFT LAB</b
+          ><small>تفاصيل صغيرة، مشاعر كبيرة</small></span
+        ></a
+      >
+      <nav aria-label="التنقل الرئيسي">
+        <a href="#catalog">الهدايا</a><a href="#occasions">المناسبات</a
+        ><a href="#about">عن جيفت لاب</a>
+      </nav>
+      <div class="header-actions">
+        <button id="account-open" class="quiet">الحساب</button
+        ><button id="cart-open" class="cart-button">
+          السلة <span id="cart-count">0</span>
+        </button>
+      </div>
+    </header>
+    <main>
+      <section class="hero wrap" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">من جيفت لاب، بكل محبّة</p>
+          <h1 id="hero-title">لكل شعور،<br />هدية تحكيه.</h1>
+          <p>
+            للفرح الكبير والتفاصيل الصغيرة، اكتشف هدايا تضيف لمستك إلى لحظات من
+            تحب.
+          </p>
+          <a class="button" href="#catalog"
+            >اكتشف الهدايا <span aria-hidden="true">←</span></a
+          >
+          <p class="hero-note">اختيارات ملهمة · تخصيص بلمستك</p>
+        </div>
+        <div class="hero-art">
+          <img
+            src="/gift-scene.svg"
+            alt="رسم توضيحي لصناديق هدايا بأشرطة قماشية ونباتات، بديل محلي للصور"
+          /><span class="art-note">هدية من القلب، بتفاصيلك أنت</span>
+        </div>
+      </section>
+      <section
+        id="occasions"
+        class="occasions wrap"
+        aria-labelledby="occasion-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">لحظات تستحق</p>
+            <h2 id="occasion-title">ما مناسبة الهدية؟</h2>
+          </div>
+          <a href="#catalog">كل الهدايا <span aria-hidden="true">←</span></a>
+        </div>
+        <div id="occasion-links" class="occasion-grid"></div>
+      </section>
+      <section
+        id="catalog"
+        class="catalog wrap"
+        aria-labelledby="catalog-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">اختيرت لتُلهمك</p>
+            <h2 id="catalog-title">هدايا بتفاصيل مميزة</h2>
+          </div>
+          <span class="demo-label">كتالوج تجريبي</span>
+        </div>
+        <form id="filters" class="filters" role="search">
+          <div class="search-field">
+            <label for="search">ابحث عن هدية</label
+            ><input
+              id="search"
+              name="search"
+              type="search"
+              placeholder="مبخرة، عطر، توزيعات…"
+            />
+          </div>
+          <div>
+            <label for="category">نوع الهدية</label
+            ><select id="category" name="category">
+              <option value="">كل الأنواع</option>
+            </select>
+          </div>
+          <div>
+            <label for="occasion">المناسبة</label
+            ><select id="occasion" name="occasion">
+              <option value="">كل المناسبات</option>
+            </select>
+          </div>
+          <div>
+            <label for="sort">الترتيب</label
+            ><select id="sort" name="sort">
+              <option value="featured">اختياراتنا</option>
+              <option value="asc">السعر: الأقل أولًا</option>
+              <option value="desc">السعر: الأعلى أولًا</option>
+            </select>
+          </div>
+          <button type="reset" class="quiet">مسح الفلاتر</button>
+        </form>
+        <p id="results-count" class="results" role="status"></p>
+        <div id="products" class="product-grid"></div>
+      </section>
+      <section id="about" class="about wrap">
+        <span aria-hidden="true">✧</span>
+        <div>
+          <p class="eyebrow">وراء كل هدية، اهتمام</p>
+          <h2>مساحة للهدايا التي تُشبه أصحابها</h2>
+          <p>
+            جيفت لاب متجر هدايا في الدمام، يهتم بتنسيق الهدايا وتفاصيلها. هذه
+            الواجهة التعليمية تتيح استكشاف أمثلة للمنتجات والتخصيص؛ تفاصيل الطلب
+            والدفع والاستلام بانتظار الاعتماد.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer class="wrap">
+      <a class="brand" href="#" lang="en" dir="ltr">GIFT LAB ✧</a>
+      <p>صُنع للاهتمام بالتفاصيل.</p>
+      <small>عرض تعليمي — لا يستقبل طلبات أو مدفوعات فعلية.</small>
+    </footer>
+    <dialog id="custom-dialog" aria-labelledby="custom-title">
+      <div class="dialog-top">
+        <h2 id="custom-title">خصّص هديتك</h2>
+        <button
+          type="button"
+          data-close
+          class="quiet"
+          aria-label="إغلاق نافذة التخصيص"
+        >
+          ×
+        </button>
+      </div>
+      <form id="custom-form">
+        <div id="custom-fields"></div>
+        <p class="muted">خيارات تجريبية؛ لا تمثل توفرًا أو تكلفة معتمدة.</p>
+        <button class="button" type="submit">أضف إلى السلة</button>
+      </form>
+    </dialog>
+    <dialog id="cart-dialog" aria-labelledby="cart-title">
+      <div class="dialog-top">
+        <h2 id="cart-title">سلة هداياك</h2>
+        <button type="button" data-close class="quiet" aria-label="إغلاق السلة">
+          ×
+        </button>
+      </div>
+      <p class="muted">
+        سلة تجريبية، لا يتم إرسال طلب. الأسعار لا تمثل عرضًا تجاريًا معتمدًا.
+      </p>
+      <div id="storage-status" role="status"></div>
+      <div id="cart-items"></div>
+      <div class="cart-total">
+        <span>الإجمالي التجريبي</span><strong id="cart-total"></strong>
+      </div>
+      <p class="muted">
+        الدفع والضرائب والشحن والحد الأدنى للكميات لم تُعتمد بعد.
+      </p>
+    </dialog>
+    <dialog id="account-dialog" aria-labelledby="account-title">
+      <div class="dialog-top">
+        <h2 id="account-title">تجربة نموذج الحساب</h2>
+        <button
+          type="button"
+          data-close
+          class="quiet"
+          aria-label="إغلاق نموذج الحساب"
+        >
+          ×
+        </button>
+      </div>
+      <p id="account-help">
+        نموذج تعليمي فقط؛ لا يُنشئ حسابًا ولا يرسل أو يحفظ بياناتك. استخدم
+        بيانات وهمية وكلمة مرور تجريبية.
+      </p>
+      <form id="account-form" aria-describedby="account-help">
+        <label for="full-name">الاسم التجريبي</label
+        ><input
+          id="full-name"
+          name="fullName"
+          autocomplete="off"
+          required
+          minlength="2"
+          maxlength="80"
+        /><label for="email">البريد الإلكتروني التجريبي</label
+        ><input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="off"
+          required
+        /><label for="password">كلمة مرور تجريبية (8 أحرف على الأقل)</label
+        ><input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          required
+          minlength="8"
+          maxlength="128"
+        /><button class="button" type="submit">تحقق من النموذج</button>
+        <p id="account-status" role="status"></p>
+      </form>
+    </dialog>
+    <p id="announcement" class="toast" role="status" aria-live="polite"></p>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
