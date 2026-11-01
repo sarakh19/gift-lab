@@ -92,3 +92,13 @@ This latest direction follows the user's review of the previous design and super
 - The desktop wordmark is centered, with navigation to its right and account/cart controls to its left. Use restrained warm brown/terracotta details and off-white/cream surfaces; preserve the two/three/four-column product grid and existing photographs.
 - Primary Saudi wording includes “هدايا تليق بغلاهم”، “وش مناسبتك؟”، “تفاصيل تفرّح الخاطر” and “خلّيها على ذوقك”. Preserve explicit educational/demo messages and avoid inventing commercial promises.
 - The user supplied https://www.tiktok.com/@glab_sa as a visual reference. Automated browsing was blocked and the direct public response contained a protection challenge, not account content. No TikTok videos or products were actually reviewed or copied. Current visual choices rely on the user's instructions and existing client requirements. Matching the shop's actual fabric arrangements and photography still requires accessible reference images from the account.
+
+## Alexandria and interaction consistency — 1 November 2026
+
+The user's latest instruction supersedes the earlier font pair. Use locally hosted Alexandria 400/500/600 throughout, including the wordmark, headings, controls and body. Header links have a darker warm-brown color and weight 500. Keep a smaller, consistent heading scale, square compact product-image frames, and the existing two/three/four-column grid.
+
+Use the warm off-white/cream/light-terracotta palette for all interface states: visited links, focus outlines, caret, selection, active filters, dropdown selection, hover, search clear button and autofill. Light terracotta buttons use dark text for readability. Do not rely on the OS native dropdown's blue selection styling: progressively enhance the existing select elements into labeled, keyboard-operated listbox popups in ui.js. Preserve the native selects as the form-data source and fallback.
+
+Selected filters appear as individually removable chips; clearing a chip restores focus to its control. Keep results updates immediate and announced by the existing status region. Product data and cart rules are unchanged; the p11 photo was replaced with a real incense photograph because the previous photograph featured a candle.
+
+Motion is supplementary: CSS handles short hover, menu, dialog and toast transitions; ui.js uses IntersectionObserver for a one-time 240ms entrance of section headings and selected sections, plus Web Animations for 140ms result feedback and 200ms cart-count feedback. Content starts visible and remains usable without animation. Respect prefers-reduced-motion both in CSS and JavaScript; cancel active scripted animations when the preference changes and avoid smooth scripted scrolling in that mode.

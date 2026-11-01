@@ -97,6 +97,20 @@ try {
     }
     throw Error(`Timed out: ${expression}`);
   };
+  const press = async (key, code, virtualKey) => {
+    await cdp('Input.dispatchKeyEvent', {
+      type: 'keyDown',
+      key,
+      code,
+      windowsVirtualKeyCode: virtualKey,
+    });
+    await cdp('Input.dispatchKeyEvent', {
+      type: 'keyUp',
+      key,
+      code,
+      windowsVirtualKeyCode: virtualKey,
+    });
+  };
   const reload = async () => {
     await evaluate('document.documentElement.dataset.oldDocument="yes"');
     await cdp('Page.reload');
@@ -114,7 +128,7 @@ try {
     'Array.from(document.images).forEach(image => { image.loading="eager"; })',
   );
   await waitFor(
-    'Array.from(document.images).every(image => image.complete && image.naturalWidth > 0)',
+    'Array.from(document.images).every(image => {image.loading="eager";return image.complete && image.naturalWidth > 0;})',
   );
   assert.equal(await evaluate('document.querySelectorAll("h1").length'), 1);
   assert.equal(await evaluate('document.documentElement.dir'), 'rtl');
@@ -129,11 +143,11 @@ try {
   );
   await evaluate('document.fonts.ready');
   assert.equal(
-    await evaluate('document.fonts.check("400 16px IBM Plex Sans Arabic")'),
+    await evaluate('document.fonts.check("400 16px Alexandria")'),
     true,
   );
   assert.equal(
-    await evaluate('document.fonts.check("400 24px Noto Naskh Arabic")'),
+    await evaluate('document.fonts.check("500 24px Alexandria")'),
     true,
   );
   assert.equal(
@@ -208,6 +222,81 @@ try {
       `No horizontal overflow: ${width}px; ${columns} product columns`,
     );
   }
+
+  await evaluate(
+    'document.querySelector("#catalog").scrollIntoView({behavior:"instant"});document.querySelector("[data-select=category] .select-trigger").focus()',
+  );
+  await press('ArrowDown', 'ArrowDown', 40);
+  assert.equal(
+    await evaluate(
+      'document.querySelector("[data-select=category] .select-trigger").getAttribute("aria-expanded")',
+    ),
+    'true',
+  );
+  await press('ArrowDown', 'ArrowDown', 40);
+  await press('Enter', 'Enter', 13);
+  assert.equal(
+    await evaluate('document.querySelector("#category").value'),
+    'مباخر',
+  );
+  assert.equal(
+    await evaluate('document.querySelectorAll(".filter-chip").length'),
+    1,
+  );
+  assert.equal(
+    await evaluate('document.activeElement.className'),
+    'select-trigger',
+  );
+  await press('ArrowDown', 'ArrowDown', 40);
+  await pause(180);
+  const menuImage = await cdp('Page.captureScreenshot', { format: 'png' });
+  await writeFile(
+    resolve(output, 'filter-menu.png'),
+    Buffer.from(menuImage.data, 'base64'),
+  );
+  assert.equal(
+    await evaluate('getComputedStyle(document.activeElement).outlineColor'),
+    'rgb(152, 84, 62)',
+  );
+  await press('Escape', 'Escape', 27);
+  assert.equal(
+    await evaluate(
+      'document.querySelector("[data-select=category] .select-trigger").getAttribute("aria-expanded")',
+    ),
+    'false',
+  );
+  await press('ArrowDown', 'ArrowDown', 40);
+  await press('Tab', 'Tab', 9);
+  assert.equal(
+    await evaluate(
+      'document.querySelector("[data-select=category] .select-trigger").getAttribute("aria-expanded")',
+    ),
+    'false',
+  );
+  await evaluate(
+    'document.querySelector("[data-clear-filter=category]").click()',
+  );
+  assert.equal(await evaluate('document.querySelector("#category").value'), '');
+  assert.equal(
+    await evaluate('document.querySelectorAll(".product-card").length'),
+    12,
+  );
+  await evaluate('document.querySelector("#search").focus()');
+  assert.equal(
+    await evaluate(
+      'getComputedStyle(document.querySelector("#search")).caretColor',
+    ),
+    'rgb(152, 84, 62)',
+  );
+  assert.equal(
+    await evaluate(
+      'getComputedStyle(document.querySelector("#search")).outlineColor',
+    ),
+    'rgb(152, 84, 62)',
+  );
+  results.push(
+    'Custom filter keyboard arrows/Enter/Escape/Tab, selected chips and removal, terracotta focus and caret',
+  );
   await evaluate(
     `document.querySelector('#search').value='مبخرة';document.querySelector('#category').value='مباخر';document.querySelector('#occasion').value='رمضان';document.querySelector('#sort').value='desc';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,
   );
@@ -332,6 +421,81 @@ try {
     '0',
   );
   results.push('Corrupt localStorage recovers; no uncaught JavaScript errors');
+  await evaluate(
+    `document.querySelector('[data-product=p1]').click();document.querySelector('[data-select=custom-0] .select-trigger').click()`,
+  );
+  await press('Escape', 'Escape', 27);
+  assert.equal(
+    await evaluate('document.querySelector("#custom-dialog").open'),
+    true,
+  );
+  assert.equal(
+    await evaluate(
+      'document.querySelector("[data-select=custom-0] .select-trigger").getAttribute("aria-expanded")',
+    ),
+    'false',
+  );
+  await evaluate(
+    'document.querySelector("[data-select=custom-0] .select-trigger").click()',
+  );
+  await press('End', 'End', 35);
+  await press(' ', 'Space', 32);
+  assert.equal(
+    await evaluate('document.querySelector("#custom-0").value'),
+    'عاجي',
+  );
+  await evaluate('document.querySelector("#custom-form").requestSubmit()');
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '1',
+  );
+  results.push(
+    'Customization picker: Escape closes popup only, End/Space select options, form submits to cart',
+  );
+  await cdp('Emulation.setEmulatedMedia', {
+    features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
+  });
+  await reload();
+  await evaluate('document.fonts.ready');
+  assert.equal(
+    await evaluate('document.querySelectorAll(".product-card").length'),
+    12,
+  );
+  await evaluate(
+    'document.querySelector("[data-select=category] .select-trigger").click()',
+  );
+  assert.equal(
+    await evaluate(
+      'getComputedStyle(document.querySelector("[data-select=category] .select-menu")).animationName',
+    ),
+    'none',
+  );
+  await press('Escape', 'Escape', 27);
+  await evaluate('document.querySelector("#account-open").click()');
+  assert.equal(
+    await evaluate(
+      'getComputedStyle(document.querySelector("#account-dialog")).animationName',
+    ),
+    'none',
+  );
+  await evaluate(
+    'document.querySelector("#account-dialog").close();document.querySelector("#search").value="هدية";document.querySelector("#search").dispatchEvent(new Event("input",{bubbles:true}));',
+  );
+  assert.equal(
+    await evaluate(
+      'document.querySelector("#products").getAnimations().length',
+    ),
+    0,
+  );
+  assert.equal(
+    await evaluate(
+      'getComputedStyle(document.querySelector("#products")).opacity',
+    ),
+    '1',
+  );
+  results.push(
+    'Reduced motion: menus/dialogs/results have no animation; content remains visible and functional',
+  );
   assert.deepEqual(errors, []);
   await writeFile(
     resolve(output, 'browser-check.json'),

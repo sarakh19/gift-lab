@@ -15,7 +15,10 @@
       نسخة تعليمية · الصور والأسعار والخيارات مؤقتة وغير معتمدة
     </div>
     <header class="site-header wrap">
-      <a class="brand" href="#" aria-label="جيفت لاب، الرئيسية"
+      <a
+        class="brand"
+        href="#"
+        aria-label="GIFT LAB — جيفت لاب، للغلا، تفاصيله، الرئيسية"
         ><span class="brand-mark" aria-hidden="true">✧</span
         ><span
           ><b lang="en" dir="ltr">GIFT LAB</b
@@ -97,7 +100,12 @@
           </div>
           <span class="demo-label">كتالوج تجريبي</span>
         </div>
-        <form id="filters" class="filters" role="search">
+        <form
+          id="filters"
+          class="filters"
+          role="search"
+          aria-label="البحث في الهدايا وتصفيتها"
+        >
           <div class="search-field">
             <label for="search">ابحث عن هدية</label
             ><input
@@ -129,6 +137,12 @@
           </div>
           <button type="reset" class="quiet">مسح الفلاتر</button>
         </form>
+        <div
+          id="active-filters"
+          class="active-filters"
+          role="group"
+          aria-label="الفلاتر المختارة"
+        ></div>
         <p id="results-count" class="results" role="status"></p>
         <div id="products" class="product-grid"></div>
       </section>

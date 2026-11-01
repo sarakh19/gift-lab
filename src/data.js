@@ -174,8 +174,8 @@ export const products = [
   {
     id: 'p11',
     image: {
-      src: '/images/40403077.jpg',
-      alt: 'مبخرة نحاسية مع ضوء شمعة على خلفية طبيعية',
+      src: '/images/incense-brass.jpg',
+      alt: 'وعاء بخور نحاسي مع دخان عطري على خلفية داكنة',
     },
     name: 'مبخرة دار',
     category: 'مباخر',
