@@ -1,4 +1,10 @@
-import { categories, occasions, products, homeImages } from './data.js';
+import {
+  categories,
+  occasions,
+  products,
+  homeImages,
+  arrangementImages,
+} from './data.js';
 import { cartTotals, filterProducts, MAX_QUANTITY } from './logic.js';
 
 const money = (value) => `${new Intl.NumberFormat('ar-SA').format(value)} ر.س`;
@@ -18,7 +24,7 @@ const optionHTML = (values) =>
     )
     .join('');
 const art = (product) =>
-  `<div class="product-art"><img src="${escapeHTML(product.image.src)}" alt="${escapeHTML(product.image.alt)}" loading="lazy" decoding="async" width="800" height="880" /></div>`;
+  `<div class="product-art"><img src="${escapeHTML(product.image.src)}" alt="${escapeHTML(product.image.alt)}" loading="lazy" decoding="async" width="800" height="800" /></div>`;
 
 // Native selects remain the form-data source and fallback; enhanced popups avoid OS colors.
 function createPickers() {
@@ -216,6 +222,12 @@ export function initUI(store) {
     get(id).src = homeImages[key].src;
     get(id).alt = homeImages[key].alt;
   }
+  get('arrangement-gallery').innerHTML = arrangementImages
+    .map(
+      (image) =>
+        `<figure><img src="${escapeHTML(image.src)}" alt="${escapeHTML(image.alt)}" width="1254" height="1254" loading="lazy" decoding="async" /><figcaption>${escapeHTML(image.caption)}</figcaption></figure>`,
+    )
+    .join('');
   let selectedProduct;
   let toastTimer;
   const announce = (message) => {

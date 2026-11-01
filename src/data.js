@@ -15,8 +15,8 @@ export const products = [
   {
     id: 'p1',
     image: {
-      src: '/images/incense-ceramic.jpg',
-      alt: 'مبخرة خزفية فيروزية بغطاء معدني على سطح خشبي',
+      src: '/images/store/incense-peach.jpg',
+      alt: 'مبخرة بيضاء بغطاء ذهبي وتنسيق قماش خوخي وورد مجفف',
     },
     name: 'مبخرة لُطف',
     category: 'مباخر',
@@ -30,8 +30,8 @@ export const products = [
   {
     id: 'p2',
     image: {
-      src: '/images/23784969.jpg',
-      alt: 'صندوق هدية بورق مزهر وشريط وردي على طاولة خشبية',
+      src: '/images/store/glass-gift-cash.jpg',
+      alt: 'صندوق زجاجي بإطار داكن وتنسيق ورد ولفائف نقدية',
     },
     name: 'بوكس لحظة فرح',
     category: 'بوكسات هدايا',
@@ -45,8 +45,8 @@ export const products = [
   {
     id: 'p3',
     image: {
-      src: '/images/10533996.jpg',
-      alt: 'قوارير عطر زجاجية في ضوء الشمس على سطح فاتح',
+      src: '/images/store/perfume-crystal-rose.jpg',
+      alt: 'قارورة عطر زجاجية بغطاء كريستالي مع علبة وردية وزهور عنابية',
     },
     name: 'عطر أثر',
     category: 'عطور',
@@ -60,8 +60,8 @@ export const products = [
   {
     id: 'p4',
     image: {
-      src: '/images/4271696.jpg',
-      alt: 'صندوق هدية صغير فيروزي بشريط أبيض',
+      src: '/images/store/welcome-favor-crown.jpg',
+      alt: 'توزيعة ضيافة عاجية مع قارورة عطر وورد بنفسجي وتاج ذهبي',
     },
     name: 'توزيعة بداية حلوة',
     category: 'توزيعات',
@@ -78,8 +78,8 @@ export const products = [
   {
     id: 'p5',
     image: {
-      src: '/images/40382309.jpg',
-      alt: 'مبخرة ريفية مع تصاعد البخور على خلفية هادئة',
+      src: '/images/store/incense-burgundy.jpg',
+      alt: 'مبخرة بيضاء وقارورة بغطاء خشبي بتنسيق قماش عنابي',
     },
     name: 'مبخرة دفء',
     category: 'مباخر',
@@ -93,8 +93,8 @@ export const products = [
   {
     id: 'p6',
     image: {
-      src: '/images/7826283.jpg',
-      alt: 'صناديق هدايا مغلفة بأشرطة ذهبية',
+      src: '/images/store/gift-case-olive.jpg',
+      alt: 'علبة هدية بغطاء خشبي وتنسيق قماش زيتي وربطة وورد مجفف',
     },
     name: 'بوكس فخر',
     category: 'بوكسات هدايا',
@@ -111,8 +111,8 @@ export const products = [
   {
     id: 'p7',
     image: {
-      src: '/images/8450250.jpg',
-      alt: 'قارورة عطر مع زهور بيضاء على طاولة فاتحة',
+      src: '/images/store/fragrance-box-ivory.jpg',
+      alt: 'علبة عطر منزلي بيضاء مزينة بوردة قماشية عاجية وزهور زرقاء',
     },
     name: 'عطر نسمة',
     category: 'عطور',
@@ -126,8 +126,8 @@ export const products = [
   {
     id: 'p8',
     image: {
-      src: '/images/17575750.jpg',
-      alt: 'علب توزيعات مناسبات صغيرة منسقة مع بطاقات',
+      src: '/images/store/favor-ivory-rose.jpg',
+      alt: 'توزيعة مغلفة بقماش أبيض وربطة وزهور وردية مجففة',
     },
     name: 'توزيعة ليلة فرح',
     category: 'توزيعات',
@@ -144,8 +144,8 @@ export const products = [
   {
     id: 'p9',
     image: {
-      src: '/images/747782.jpg',
-      alt: 'هدية مع دمية دب وردية وصندوق مزين بشريط',
+      src: '/images/store/perfume-dome-wood.jpg',
+      alt: 'قارورة عطر داخل قبة زجاجية بقاعدة خشبية وربطة بيضاء',
     },
     name: 'بوكس أهلًا صغيرنا',
     category: 'بوكسات هدايا',
@@ -159,8 +159,8 @@ export const products = [
   {
     id: 'p10',
     image: {
-      src: '/images/7460112.jpg',
-      alt: 'علبة هدية مزهرة بتفاصيل وشريط وردي',
+      src: '/images/store/glass-favor-stand.jpg',
+      alt: 'حامل أبيض متدرج مع توزيعات زجاجية وربطات وردية وباقة زهور',
     },
     name: 'توزيعة امتنان',
     category: 'توزيعات',
@@ -174,8 +174,8 @@ export const products = [
   {
     id: 'p11',
     image: {
-      src: '/images/incense-brass.jpg',
-      alt: 'وعاء بخور نحاسي مع دخان عطري على خلفية داكنة',
+      src: '/images/store/incense-blue-wrap.jpg',
+      alt: 'مبخرة بيضاء وذهبية بتنسيق قماش سماوي وورد مجفف',
     },
     name: 'مبخرة دار',
     category: 'مباخر',
@@ -189,8 +189,8 @@ export const products = [
   {
     id: 'p12',
     image: {
-      src: '/images/10278973.jpg',
-      alt: 'صندوق هدية بشريط بني على أقمشة ناعمة',
+      src: '/images/store/incense-tray-rose.jpg',
+      alt: 'صينية مباخر بيضاء بتنسيق وردي وتغليف شفاف وأشرطة عاجية',
     },
     name: 'بوكس هلال',
     category: 'بوكسات هدايا',
@@ -203,14 +203,47 @@ export const products = [
   },
 ];
 
-// Temporary stock photography, not approved Gift Lab product imagery.
+// Images supplied by the user; original PNG files remain unchanged.
 export const homeImages = {
   hero: {
-    src: '/images/9628007.jpg',
-    alt: 'هدية مغلفة بشريط قماشي فاتح تقدمها يدان على خلفية محايدة',
+    src: '/images/store/gift-tray-lavender.jpg',
+    alt: 'تنسيق هدايا بأقمشة بنفسجية وعاجية وزهور داخل صينية بيضاء',
   },
   customization: {
-    src: '/images/5486842.jpg',
-    alt: 'تنسيق شريط قماشي على صندوق هدية أخضر باليد',
+    src: '/images/store/incense-peach-collection.jpg',
+    alt: 'مجموعة مباخر بيضاء وذهبية بأقمشة خوخية وورد مجفف',
   },
 };
+
+export const arrangementImages = [
+  {
+    src: '/images/store/favor-tower-neutral.jpg',
+    alt: 'حامل توزيعات متدرج بأقمشة بيج وتغليف عاجي',
+    caption: 'توزيعات بتنسيق متدرج',
+  },
+  {
+    src: '/images/store/oud-pocket-blue.jpg',
+    alt: 'جيب هدايا عاجي مع عطر وعود وورد أزرق',
+    caption: 'العطر والعود بلمسة خاصة',
+  },
+  {
+    src: '/images/store/occasion-trays-blue.jpg',
+    alt: 'صواني توزيعات زرقاء وعاجية مع تنسيق يحمل اسم خالد',
+    caption: 'لمسة باسمك',
+  },
+  {
+    src: '/images/store/favors-lavender-assortment.jpg',
+    alt: 'توزيعات متنوعة بربطات بنفسجية وورد عاجي ووردي',
+    caption: 'ألوان متناغمة',
+  },
+  {
+    src: '/images/store/perfume-tray-ivory.jpg',
+    alt: 'صينية قوارير عطور مزينة بورد أبيض وتغليف شفاف',
+    caption: 'تغليف يكمّل الهدية',
+  },
+  {
+    src: '/images/store/gift-envelope-peach.jpg',
+    alt: 'ظرف هدية خوخي مع ربطة عاجية وزهور مجففة',
+    caption: 'تفاصيل من القلب',
+  },
+];

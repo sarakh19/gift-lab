@@ -159,7 +159,11 @@ try {
   const imagePaths = await evaluate(
     'Array.from(document.images, image => image.getAttribute("src"))',
   );
-  assert.equal(new Set(imagePaths).size, 14);
+  assert.equal(new Set(imagePaths).size, 20);
+  assert.equal(
+    imagePaths.every((path) => path.startsWith('/images/store/')),
+    true,
+  );
   for (const width of [360, 768, 1280]) {
     await cdp('Emulation.setDeviceMetricsOverride', {
       width,

@@ -106,3 +106,13 @@ Motion is supplementary: CSS handles short hover, menu, dialog and toast transit
 ## Presentation copy cleanup — 1 November 2026
 
 At the user's explicit request, remove educational/demo/temporary wording and related notices from the rendered presentation, including the top strip, product badges/descriptions/prices, cart, customization, footer, image alt suffixes and account form. This overrides prior instructions to show those notices in the interface; retain factual implementation/data limitations in project documentation. No prices, stock, policies, backend integration or production approval were added. The account action remains validation-only, with neutral feedback that the fields are complete and correctly formatted; it does not claim account creation.
+
+## User-supplied shop imagery — 1 November 2026
+
+Replace every displayed stock photograph with the twenty images attached by the user. Preserve original PNGs in Downloads and produce local JPEG delivery copies at the original dimensions, quality 92; do not recolor fabrics, alter product details, or crop product-card photographs. Select images by their visible subject rather than their occasionally inaccurate source filenames.
+
+- Twelve distinct photographs map to the existing twelve product IDs. Keep names, prices, options, categories and occasions intact.
+- Use the lavender arrangement for the full-width hero and the peach incense collection for customization. Use contain with responsive positioning so square compositions remain complete, with text at the right of the wide hero and above the photograph on mobile.
+- Show the remaining six arrangements in a compact gallery within the existing customization section, not as new catalog products or new commercial offers.
+- All displayed image paths now use /images/store/. File provenance, dimensions and delivery sizes are recorded in docs/store-images.json. Earlier stock files remain preserved but are not referenced by the rendered page.
+- Retain Alexandria, the current palette, accessible filter interactions, reduced-motion support and the user's removal of educational/demo notices from the presentation.

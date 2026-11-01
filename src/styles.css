@@ -1192,3 +1192,105 @@ dialog::backdrop {
     animation: none;
   }
 }
+
+/* Store photography: keep the complete arrangement and original fabric colors. */
+.product-art {
+  background: #faf8f4;
+}
+.product-art img {
+  object-fit: contain;
+}
+.hero {
+  background: #faf8f4;
+  min-height: 750px;
+}
+.hero-art img {
+  object-fit: contain;
+  object-position: center bottom;
+}
+.hero::after {
+  background: linear-gradient(180deg, #faf8f4 0%, #faf8f4 40%, #faf8f400 62%);
+}
+.hero-bottom {
+  background: #faf8f4e6;
+}
+.customization {
+  background: #f6f0e8;
+}
+.customization-photo {
+  background: #faf8f4;
+}
+.customization-photo img {
+  height: 340px;
+  object-fit: contain;
+  object-position: center;
+}
+.arrangement-showcase {
+  grid-column: 1/-1;
+  padding: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.arrangement-showcase h3 {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+.arrangement-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.arrangement-gallery figure {
+  margin: 0;
+  min-width: 0;
+}
+.arrangement-gallery img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 5px;
+}
+.arrangement-gallery figcaption {
+  padding-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.8;
+}
+@media (min-width: 768px) {
+  .hero {
+    min-height: 520px;
+  }
+  .hero-art img {
+    object-position: left center;
+  }
+  .hero::after {
+    background: linear-gradient(270deg, #faf8f4 0%, #faf8f4 38%, #faf8f400 65%);
+  }
+  .customization-photo img {
+    height: 410px;
+  }
+  .arrangement-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .arrangement-showcase {
+    padding: 1.5rem;
+  }
+}
+@media (min-width: 1280px) {
+  .hero {
+    min-height: 560px;
+  }
+  .hero::after {
+    background: linear-gradient(270deg, #faf8f4 0%, #faf8f4 40%, #faf8f400 60%);
+  }
+  .hero-art img {
+    object-position: left center;
+  }
+  .customization-photo img {
+    height: 440px;
+  }
+  .arrangement-gallery {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
