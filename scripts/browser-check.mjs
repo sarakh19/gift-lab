@@ -209,6 +209,20 @@ try {
       true,
       `Overflow at ${width}`,
     );
+    assert.equal(
+      await evaluate(
+        'Math.abs(document.querySelector(".hero-art img").getBoundingClientRect().width-document.documentElement.clientWidth)<1 && getComputedStyle(document.querySelector(".hero-art img")).objectFit==="cover"',
+      ),
+      true,
+      'Banner photograph fills viewport width',
+    );
+    assert.equal(
+      await evaluate(
+        '[...document.querySelectorAll(".occasion-card")].every(el=>Math.abs(el.getBoundingClientRect().width-el.getBoundingClientRect().height)<1 && getComputedStyle(el).borderRadius==="50%")',
+      ),
+      true,
+      'Occasion buttons are circles',
+    );
     const image = await cdp('Page.captureScreenshot', {
       format: 'png',
       captureBeyondViewport: false,

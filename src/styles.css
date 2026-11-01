@@ -1680,3 +1680,126 @@ html {
     padding-block: 3rem;
   }
 }
+
+/* Full-bleed banner: the photograph fills the viewport, with copy over it. */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 680px;
+  padding-top: 0;
+}
+.hero-art {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+.hero-art img {
+  object-fit: cover;
+  object-position: 40% center;
+}
+.hero::after {
+  display: block;
+  background: linear-gradient(
+    180deg,
+    var(--surface) 0%,
+    var(--page-wash) 36%,
+    transparent 78%
+  );
+}
+.hero-content {
+  width: min(100% - 2rem, 1240px);
+  margin-inline: auto;
+}
+.hero-copy {
+  padding-block: 2rem 1rem;
+  max-width: 480px;
+}
+.hero-bottom {
+  background: var(--page-wash);
+  border-top: 0;
+  margin-top: auto;
+}
+.occasion-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+  justify-items: center;
+}
+.occasion-card {
+  width: 100%;
+  max-width: 126px;
+  min-height: 0;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  line-height: 1.7;
+  text-align: center;
+}
+.occasion-card:hover {
+  background: var(--secondary);
+  border-color: var(--accent);
+}
+.occasion-card[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+@media (min-width: 768px) {
+  .hero {
+    min-height: 570px;
+    padding-top: 0;
+  }
+  .hero-content {
+    width: min(100% - 4rem, 1240px);
+    margin-inline: auto;
+  }
+  .hero-copy {
+    padding-block: 3rem 2rem;
+    max-width: 390px;
+  }
+  .hero-art {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+  .hero-art img {
+    object-position: center 58%;
+  }
+  .hero::after {
+    background: linear-gradient(
+      270deg,
+      var(--surface) 0%,
+      var(--page-wash) 26%,
+      transparent 65%
+    );
+  }
+  .occasion-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+  .occasion-card {
+    font-size: 0.72rem;
+  }
+}
+@media (min-width: 1280px) {
+  .hero {
+    min-height: 600px;
+  }
+  .hero-copy {
+    max-width: 450px;
+    padding-top: 4rem;
+  }
+  .hero-art {
+    margin: 0;
+  }
+  .occasion-card {
+    font-size: 0.82rem;
+  }
+}
