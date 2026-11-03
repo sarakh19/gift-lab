@@ -139,7 +139,7 @@ try {
     true,
   );
   results.push(
-    '12 products, single h1, RTL, all local images loaded, all inputs labeled',
+    '12 API products, single h1, RTL, all local images loaded, all inputs labeled',
   );
   await evaluate('document.fonts.ready');
   assert.equal(
@@ -179,7 +179,8 @@ try {
   const imagePaths = await evaluate(
     'Array.from(document.images, image => image.getAttribute("src"))',
   );
-  assert.equal(new Set(imagePaths).size, 20);
+  // Brand photography only: the products API provides no product images.
+  assert.equal(new Set(imagePaths).size, 8);
   assert.equal(
     imagePaths.every((path) => path.startsWith('/images/store/')),
     true,
@@ -298,7 +299,7 @@ try {
   await press('Enter', 'Enter', 13);
   assert.equal(
     await evaluate('document.querySelector("#category").value'),
-    'مباخر',
+    'Bags',
   );
   assert.equal(
     await evaluate('document.querySelectorAll(".filter-chip").length'),
@@ -359,13 +360,25 @@ try {
     'Custom filter keyboard arrows/Enter/Escape/Tab, selected chips and removal, dusty-rose focus and caret',
   );
   await evaluate(
-    `document.querySelector('#search').value='مبخرة';document.querySelector('#category').value='مباخر';document.querySelector('#occasion').value='رمضان';document.querySelector('#sort').value='desc';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,
+    `document.querySelector('#search').value='bag';document.querySelector('#category').value='Bags';document.querySelector('#sort').value='desc';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,
   );
   assert.deepEqual(
     await evaluate(
       'Array.from(document.querySelectorAll(".product-card h3"),item=>item.textContent)',
     ),
-    ['مبخرة دفء', 'مبخرة لُطف'],
+    [
+      'Travel Duffel Bag',
+      'Leather Tote Bag',
+      'Canvas Backpack',
+      'Mini Crossbody Bag',
+    ],
+  );
+  await evaluate(
+    `document.querySelector('#occasion').value='رمضان';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,
+  );
+  assert.equal(
+    await evaluate('document.querySelectorAll(".product-card").length'),
+    0,
   );
   await evaluate(
     `document.querySelector('#search').value='لا يوجد';document.querySelector('#search').dispatchEvent(new Event('input',{bubbles:true}));`,
@@ -379,13 +392,11 @@ try {
   results.push('Combined filters and sorting, empty results and reset');
   await evaluate('localStorage.clear()');
   await reload();
-  const add = async (color = 'رملي') =>
-    evaluate(
-      `document.querySelector('[data-product="p1"]').click();document.querySelector('#custom-0').value=${JSON.stringify(color)};document.querySelector('#custom-form').requestSubmit();`,
-    );
-  await add();
-  await add();
-  await add('عاجي');
+  const add = async (id) =>
+    evaluate(`document.querySelector('[data-product="${id}"]').click()`);
+  await add(1);
+  await add(1);
+  await add(2);
   assert.equal(
     await evaluate('document.querySelector("#cart-count").textContent'),
     '3',
@@ -425,10 +436,12 @@ try {
   );
   assert.equal(
     await evaluate('document.querySelector("#cart-total").textContent'),
-    await evaluate('new Intl.NumberFormat("ar-SA").format(85)+" ر.س"'),
+    await evaluate(
+      'new Intl.NumberFormat("ar-SA",{minimumFractionDigits:2,maximumFractionDigits:2}).format(49)',
+    ),
   );
   results.push(
-    'Cart variant merge/separation, persistence, quantity controls, removal and total',
+    'Cart merge by product, persistence, quantity controls, removal and total',
   );
   await cdp('Input.dispatchKeyEvent', {
     type: 'keyDown',
@@ -482,36 +495,35 @@ try {
     '0',
   );
   results.push('Corrupt localStorage recovers; no uncaught JavaScript errors');
-  await evaluate(
-    `document.querySelector('[data-product=p1]').click();document.querySelector('[data-select=custom-0] .select-trigger').click()`,
-  );
-  await press('Escape', 'Escape', 27);
-  assert.equal(
-    await evaluate('document.querySelector("#custom-dialog").open'),
-    true,
-  );
   assert.equal(
     await evaluate(
-      'document.querySelector("[data-select=custom-0] .select-trigger").getAttribute("aria-expanded")',
+      '[...document.querySelectorAll(".add-button:disabled")].every(button=>button.textContent==="غير متوفر") && document.querySelectorAll(".add-button:disabled").length===2',
     ),
-    'false',
+    true,
   );
-  await evaluate(
-    'document.querySelector("[data-select=custom-0] .select-trigger").click()',
+  await cdp('Network.enable');
+  await cdp('Network.setBlockedURLs', {
+    urls: ['*shopboard-api.vercel.app*'],
+  });
+  await evaluate('document.documentElement.dataset.oldDocument="yes"');
+  await cdp('Page.reload');
+  await waitFor(
+    '!document.documentElement.dataset.oldDocument && document.querySelector("[data-retry]")',
   );
-  await press('End', 'End', 35);
-  await press(' ', 'Space', 32);
   assert.equal(
-    await evaluate('document.querySelector("#custom-0").value'),
-    'عاجي',
+    await evaluate('document.querySelectorAll(".product-card").length'),
+    0,
   );
-  await evaluate('document.querySelector("#custom-form").requestSubmit()');
-  assert.equal(
-    await evaluate('document.querySelector("#cart-count").textContent'),
-    '1',
+  const errorImage = await cdp('Page.captureScreenshot', { format: 'png' });
+  await writeFile(
+    resolve(output, 'products-error.png'),
+    Buffer.from(errorImage.data, 'base64'),
   );
+  await cdp('Network.setBlockedURLs', { urls: [] });
+  await evaluate('document.querySelector("[data-retry]").click()');
+  await waitFor('document.querySelectorAll(".product-card").length === 12');
   results.push(
-    'Customization picker: Escape closes popup only, End/Space select options, form submits to cart',
+    'Out-of-stock items disabled; blocked API shows error state; retry loads the catalog',
   );
   await cdp('Emulation.setEmulatedMedia', {
     features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],

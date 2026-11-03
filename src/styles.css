@@ -362,6 +362,15 @@ select {
   object-fit: contain;
   transition: transform 0.3s;
 }
+/* The products API sends no images: show an honest, neutral placeholder. */
+.product-art--placeholder {
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
 .product-card:hover img {
   transform: scale(1.02);
 }

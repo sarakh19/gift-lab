@@ -1,0 +1,89 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "title": "Leather Tote Bag",
+      "category_name": "Bags",
+      "price_cents": 8900,
+      "in_stock": true
+    },
+    {
+      "id": 2,
+      "title": "Canvas Backpack",
+      "category_name": "Bags",
+      "price_cents": 4900,
+      "in_stock": true
+    },
+    {
+      "id": 3,
+      "title": "Mini Crossbody Bag",
+      "category_name": "Bags",
+      "price_cents": 3900,
+      "in_stock": false
+    },
+    {
+      "id": 4,
+      "title": "White Sneakers",
+      "category_name": "Shoes",
+      "price_cents": 7500,
+      "in_stock": true
+    },
+    {
+      "id": 5,
+      "title": "Running Shoes",
+      "category_name": "Shoes",
+      "price_cents": 11000,
+      "in_stock": true
+    },
+    {
+      "id": 6,
+      "title": "Suede Loafers",
+      "category_name": "Shoes",
+      "price_cents": 9500,
+      "in_stock": true
+    },
+    {
+      "id": 7,
+      "title": "Wool Scarf",
+      "category_name": "Accessories",
+      "price_cents": 2500,
+      "in_stock": true
+    },
+    {
+      "id": 8,
+      "title": "Silver Watch",
+      "category_name": "Accessories",
+      "price_cents": 15000,
+      "in_stock": true
+    },
+    {
+      "id": 9,
+      "title": "Sunglasses",
+      "category_name": "Accessories",
+      "price_cents": 3500,
+      "in_stock": false
+    },
+    {
+      "id": 10,
+      "title": "Travel Duffel Bag",
+      "category_name": "Bags",
+      "price_cents": 12000,
+      "in_stock": true
+    },
+    {
+      "id": 11,
+      "title": "Rain Boots",
+      "category_name": "Shoes",
+      "price_cents": 6000,
+      "in_stock": true
+    },
+    {
+      "id": 12,
+      "title": "Leather Belt",
+      "category_name": "Accessories",
+      "price_cents": 3000,
+      "in_stock": true
+    }
+  ],
+  "total": 12
+}
