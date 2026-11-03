@@ -4,15 +4,17 @@ import { readFile } from 'node:fs/promises';
 import { ApiError, getJson } from '../src/shared/api/client.ts';
 import {
   fetchProducts,
-  mapApiProduct,
   parseProductsResponse,
 } from '../src/modules/products/products.api.ts';
+import { mapApiProduct } from '../src/modules/products/products.mapper.ts';
 import {
-  filterProducts,
   formatPrice,
   listCategories,
-  parseFilters,
 } from '../src/modules/products/products.logic.ts';
+import {
+  filterProducts,
+  parseFilters,
+} from '../src/modules/filters/filters.logic.ts';
 
 // A real response saved from https://shopboard-api.vercel.app/api/products.
 const fixture = JSON.parse(

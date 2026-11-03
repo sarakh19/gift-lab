@@ -1,5 +1,6 @@
 import { ApiError, getJson } from '../../shared/api/client.ts';
 import { isPositiveInteger, isRecord } from '../../shared/validation.ts';
+import { mapApiProduct } from './products.mapper.ts';
 import type {
   ApiProduct,
   ApiProductsResponse,
@@ -44,18 +45,6 @@ export function parseProductsResponse(data: unknown): ApiProductsResponse {
     items.push(item);
   });
   return { items, total: data.total };
-}
-
-// Mapper: converts the API's field names and shape into the app's Product model.
-export function mapApiProduct(apiProduct: ApiProduct): Product {
-  return {
-    id: apiProduct.id,
-    name: apiProduct.title.trim(),
-    category: apiProduct.category_name.trim(),
-    priceCents: apiProduct.price_cents,
-    inStock: apiProduct.in_stock,
-    occasions: [],
-  };
 }
 
 export async function fetchProducts(): Promise<Product[]> {

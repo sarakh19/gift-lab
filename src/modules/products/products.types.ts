@@ -25,26 +25,18 @@ export type Occasion =
   | 'اليوم الوطني'
   | 'يوم التأسيس';
 
+// Categories are defined by the API (e.g. "Bags"), so this is open text, not a fixed union.
+export type Category = string;
+
 export interface Product {
   id: number;
   name: string;
-  category: string;
+  category: Category;
   priceCents: number;
   inStock: boolean;
   // The API sends no occasions, so this is empty for API products (never guessed).
   occasions: readonly Occasion[];
 }
-
-export type SortOrder = 'featured' | 'asc' | 'desc';
-
-export interface ProductFilters {
-  search: string;
-  category: string;
-  occasion: Occasion | '';
-  sort: SortOrder;
-}
-
-export type FilterKey = keyof ProductFilters;
 
 // Request state for the catalog. `status` tells TypeScript which fields exist.
 export type ProductsState =
