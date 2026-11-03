@@ -17,13 +17,17 @@ export default tseslint.config(
       },
     },
     rules: {
-      // Project rules: no `as` casts, no `!` assertions (any and @ts-ignore are
-      // already errors in the recommended set).
+      // Project rules: no `as` casts, no `!` assertions, no ts-comment directives
+      // (explicit any is already an error in the recommended set).
       '@typescript-eslint/consistent-type-assertions': [
         'error',
         { assertionStyle: 'never' },
       ],
       '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
+        { 'ts-expect-error': true, 'ts-ignore': true, 'ts-nocheck': true },
+      ],
     },
   },
 );

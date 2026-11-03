@@ -141,7 +141,7 @@ export function initFiltersUI({
     reset: () => filtersForm.reset(),
     setCategories(categories) {
       const current = categorySelect.value;
-      categorySelect.length = 1; // Keep only "كل الأنواع".
+      categorySelect.length = 1; // Keep only the "all categories" option.
       categorySelect.insertAdjacentHTML('beforeend', optionHTML(categories));
       categorySelect.value = current;
       if (categorySelect.selectedIndex < 0) categorySelect.selectedIndex = 0;
