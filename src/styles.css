@@ -1142,7 +1142,7 @@ dialog .select-menu {
   color: var(--text);
   background: var(--cream);
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: 8px;
   box-shadow: 0 4px 18px var(--shadow);
 }
 .toast:not(:empty),
