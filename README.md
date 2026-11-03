@@ -1,67 +1,173 @@
-# جيفت لاب — نسخة تعليمية
+# Gift Lab
 
-واجهة عربية RTL للأفراد، باستخدام Vite وHTML وCSS وJavaScript دون إطار واجهات. المنتجات والأسعار والتخصيصات بيانات تجريبية. لا يوجد backend أو دفع أو حساب حقيقي.
+An Arabic, right-to-left storefront for Gift Lab, a gift shop in Dammam (gifts, incense burners, perfumes and occasion giveaways). It is a learning project for a Software Engineering with AI course. The product catalog loads from the instructor's products API. There is no backend, checkout or real account system.
 
-## التشغيل
+## Features
 
-يتطلب Node.js 22.12+ أو إصدارًا أحدث متوافقًا مع Vite 8. استُخدم Node 24.18.0 أثناء التنفيذ.
+- **Product catalog from an API.** The catalog has loading, error (with retry), empty and success states.
+- **Search.** It is Arabic-aware: it ignores diacritics and tatweel, and unifies alef forms. It matches on product name and category.
+- **Filters.** Category options are built from the API data. The occasion filter has one-tap occasion circles and removable active-filter chips.
+- **Sorting** by price, ascending or descending. Sorting works on a copy, so the catalog is never mutated.
+- **Cart:**
+  - Add available products directly; out-of-stock products have a disabled button.
+  - Change the quantity (1–99), remove items, and see the item count and total.
+  - The cart is saved in `localStorage` and survives refreshes. Corrupt or outdated saved data is ignored safely.
+- **Demo registration form.** It uses native HTML validation only. Nothing is sent to a server or stored.
+- **Responsive and accessible.** The layout is mobile-first (360 / 768 / 1280px), keyboard-operable custom selects keep a native `<select>` fallback, and the page respects reduced-motion settings.
 
-```powershell
-npm.cmd ci
-npm.cmd run dev
+## Technology stack
+
+| Area       | Tool                                                     |
+| ---------- | -------------------------------------------------------- |
+| Build/dev  | Vite 8                                                   |
+| Language   | TypeScript 6.0 (`strict`), HTML, CSS — no UI framework   |
+| Linting    | ESLint 10 + typescript-eslint 8 (type-aware rules)       |
+| Formatting | Prettier 3                                               |
+| Git hooks  | Husky 9 + lint-staged 16                                 |
+| Tests      | Node's built-in test runner (`node --test`), Node 22.18+ |
+| Browser QA | `scripts/browser-check.mjs` (Chrome DevTools Protocol)   |
+
+TypeScript is pinned to `~6.0.3` because typescript-eslint 8 supports TypeScript up to 6.0. TypeScript 7 does not ship the JavaScript API that typescript-eslint needs.
+
+## Getting started
+
+Requires Node.js 22.18 or newer (development used 24.18.0).
+
+```bash
+npm ci
+npm run dev        # http://127.0.0.1:5173
 ```
 
-افتح الرابط الذي يطبعه Vite، افتراضيًا http://127.0.0.1:5173. في الأنظمة الأخرى يمكن استخدام `npm` بدل `npm.cmd`. الأمر الثاني يستمر حتى Ctrl+C.
+On Windows PowerShell, if script execution blocks `npm`, use `npm.cmd` instead.
 
-```powershell
-npm.cmd run lint
-npm.cmd run format:check
-npm.cmd test
-npm.cmd run build
-npm.cmd run preview
+## Commands
+
+| Command                | What it does                            |
+| ---------------------- | --------------------------------------- |
+| `npm run dev`          | Start the Vite dev server               |
+| `npm run build`        | Production build into `dist/`           |
+| `npm run preview`      | Serve the production build              |
+| `npm run typecheck`    | `tsc --noEmit` with strict settings     |
+| `npm run lint`         | ESLint for JavaScript and TypeScript    |
+| `npm run format`       | Fix formatting with Prettier            |
+| `npm run format:check` | Check formatting without changing files |
+| `npm test`             | Unit tests in `tests/`                  |
+
+**Pre-commit hook:**
+
+- Husky runs lint-staged, which formats staged files and runs ESLint on staged JS/TS files.
+- It then runs `npm run typecheck`.
+- Any failure blocks the commit.
+
+## Architecture
+
+The code is organized by feature. Each feature folder owns its types, pure logic, state and DOM code.
+
+```text
+src/
+├── main.ts                       # startup: create shared services, wire modules
+├── styles.css                    # all presentation (design tokens on :root)
+├── shared/
+│   ├── api/client.ts             # fetch + JSON + typed ApiError (no product knowledge)
+│   ├── validation.ts             # isRecord, isPositiveInteger, findById<T>
+│   ├── dom.ts                    # byId, closestFromEvent, escapeHTML, optionHTML
+│   └── ui/
+│       ├── select-picker.ts      # accessible custom selects over native <select>
+│       ├── motion.ts             # animations that respect reduced motion
+│       └── dialogs.ts            # shared <dialog> close behavior
+└── modules/
+    ├── products/
+    │   ├── products.types.ts     # ApiProduct, Product, Category, Occasion, ProductsState
+    │   ├── products.api.ts       # runtime validation + fetchProducts()
+    │   ├── products.mapper.ts    # ApiProduct -> Product
+    │   ├── products.logic.ts     # formatPrice, listCategories
+    │   └── products.ui.ts        # catalog rendering and request states
+    ├── filters/
+    │   ├── filters.types.ts      # ProductFilters, FilterKey, SortOrder
+    │   ├── filters.logic.ts      # parseFilters, filterProducts, normalize
+    │   └── filters.ui.ts         # filter form, chips, occasion circles
+    ├── cart/
+    │   ├── cart.types.ts         # CartItem, Cart, CartState, CartStore
+    │   ├── cart.logic.ts         # sanitizeCart, cartTotals
+    │   ├── cart.state.ts         # store + localStorage persistence
+    │   └── cart.ui.ts            # cart dialog
+    ├── notifications/
+    │   └── notifications.ui.ts   # toast in a live region
+    ├── home/                     # brand photography (not the catalog)
+    └── account/                  # demo registration form
 ```
 
-`npm.cmd run format` يصلح التنسيق. Husky يشغّل lint-staged قبل الالتزام، فينسّق الملفات المرحلية ويفحص JavaScript؛ الفشل يمنع الالتزام. يحتاج `prepare` إلى مجلد Git قابل للكتابة.
+**Dependency rules:**
 
-## خريطة الملفات
+- Dependencies flow in one direction: `main` → `modules` → `shared`. `shared` never imports from `modules`.
+- `products` never imports from `cart` or `filters/filters.ui`. `main.ts` connects them through callbacks.
+- There are no circular imports.
 
-| الملف                             | المسؤولية                                                                  |
-| --------------------------------- | -------------------------------------------------------------------------- |
-| `index.html`                      | هيكل الصفحة الدلالي، عنوان h1 الوحيد، النماذج وتسمياتها والنوافذ الأصلية   |
-| `src/data.js`                     | 12 منتجًا تجريبيًا وتصنيفاتها ومناسباتها وخياراتها                         |
-| `src/logic.js`                    | دوال نقية للبحث والتصفية والفرز والتحقق من السلة وحساب إجمالياتها          |
-| `src/state.js`                    | إضافة عناصر السلة وكمياتها وحذفها، واستعادة JSON وحفظه بأمان               |
-| `src/ui.js`                       | الوحدة التطبيقية الوحيدة التي تتعامل مع DOM وتربط الأحداث وتعرض البيانات   |
-| `src/main.js`                     | ربط بدء التطبيق واستيراد الأنماط، بلا منطق أعمال                           |
-| `src/styles.css`                  | الألوان والخطوط وFlexbox وGrid والتجاوب والتركيز                           |
-| `public/images/` و`public/fonts/` | صور فوتوغرافية مؤقتة وخط Alexandria محلي؛ المصادر في docs/image-sources.md |
-| `tests/logic.test.js`             | اختبارات المنطق والحالة والتخزين باستخدام Node المدمج                      |
-| `scripts/browser-check.mjs`       | أداة QA منفصلة لـChrome المحلي على Windows، وليست جزءًا من التطبيق         |
-| `docs/day-01.md`                  | شرح العمل والمفاهيم والتحقق والقرارات المعلقة                              |
-| `debugging-log.md`                | مشكلات مرصودة وأسبابها وإصلاحاتها وحدود الفحص                              |
+**Separation of concerns:**
 
-## استخدام النسخة
+- `*.api.ts` talks to the network.
+- `*.logic.ts` contains pure functions: no DOM, no storage.
+- `*.state.ts` owns persistence.
+- `*.ui.ts` is the only kind of file that touches the DOM.
 
-اكتب في البحث ثم اختر نوعًا ومناسبة وترتيبًا؛ تعمل الشروط مجتمعة. زر المناسبة يغيّر مرشح المناسبة مع الحفاظ على البحث والنوع. زر مسح الفلاتر يعيد الكتالوج كاملًا.
+## Products API integration
 
-«خصّص وأضف» يعرض خيارات المنتج نفسه. يتجمع المنتج ذو الخيارات المتطابقة في سطر واحد، وتنفصل الخيارات المختلفة. تعرض السلة عدد القطع وإجماليها، وتتيح الزيادة والتقليل والإدخال المباشر والحذف. حد 99 لكل تخصيص قيد تقني للتجربة، وليس مخزونًا أو سياسة كمية معتمدة. لا توجد زيادات أسعار للتخصيص في هذه البيانات التجريبية.
+- **Endpoint:** `https://shopboard-api.vercel.app/api/products`
+- **Response:** `{ items: ApiProduct[], total: number }`
+- **Item fields:** `id`, `title`, `category_name`, `price_cents` and `in_stock`.
 
-الحساب تجربة تحقق HTML أصلي فقط؛ استخدم بيانات وهمية. لا تُرسل بيانات النموذج إلى خادم ولا تُحفظ كلمة المرور. الحقول تُمسح عند النجاح أو إغلاق النافذة. التخزين المحلي مخصص لبيانات السلة غير الحساسة فقط.
+How the data flows:
 
-## الفحص والحدود
+1. `getJson()` in `shared/api/client.ts` fetches with a 10-second timeout. It throws `ApiError` with a `kind` of `network`, `timeout`, `http` (non-2xx), `parse` (invalid JSON) or `validation`.
+2. `parseProductsResponse()` checks every field at runtime and rejects duplicate IDs. If anything is malformed, it rejects the whole response instead of guessing.
+3. `mapApiProduct()` converts API names to the internal `Product` model (for example, `title` → `name`, `price_cents` → `priceCents`).
+4. `products.ui.ts` renders the matching state. Network failures never cause an unhandled promise rejection.
 
-نجحت اختبارات Node وESLint وPrettier وبناء الإنتاج. اجتاز Chrome الفلاتر والسلة والتحديث والنموذج وصور المنتجات وغياب التمرير الأفقي عند 360 و768 و1280. التفاصيل في التوثيق اليومي. تشغيل الفحص البصري اختياري: `node scripts/browser-check.mjs` مع تشغيل خادم Vite ووجود Chrome في المسار الموضح داخل الأداة؛ قد يحتاج إذن البيئة لتشغيل المتصفح. تُحفظ نتائجه ولقطاته في `test-results/` المتجاهل في Git، ويُنظف ملف Chrome الخاص به.
+Data the API does **not** provide is never invented:
 
-اكتمل قياس Lighthouse لاحقًا بعد توفير المساحة: Accessibility 100/100 للصفحة الرئيسية على نسخة الإنتاج المحلية باستخدام Lighthouse 13.6.0؛ لا يغني عن فحص قارئ شاشة فعلي. بقيت خمسة تنبيهات moderate في شجرة اعتماديات ESLint التطويرية وفق npm audit؛ مصدرها minimatch، ولا توجد اعتماديات إنتاجية للتطبيق. لم أطبق ترقية قسرية عابرة للإصدارات الرئيسية لاعتمادية داخلية.
+- No currency, so prices are shown as numbers without a symbol.
+- No images, so cards show a neutral "no image" placeholder.
+- No occasions, so occasion filters return the empty state with a reset action.
+- No customization options, so available products are added directly to the cart.
 
-لا توجد سياسات دفع أو شحن أو إلغاء مخترعة. يلزم اعتماد الأسعار والصور والمخزون والتجهيز والضرائب وحدود الكميات وخيارات التخصيص وسياسة إظهار الكتالوج قبل إطلاق تجاري. أُنشئ Git محلي فقط؛ يجب تحديد المستودع قبل أي نشر.
+## Testing and verification
 
-آخر تحديث تصميمي: صور فوتوغرافية محلية مختلفة لكل منتج، وبطاقات بعمودين للجوال وثلاثة للتابلت وأربعة للشاشة الواسعة، وقسم تخصيص مصور. الصور من بيانات مؤقتة وليست صور جيفت لاب المعتمدة. ملفات SVG القديمة محفوظة ولا تُعرض. راجع docs/image-sources.md لمصادر الصور، وDESIGN.md للاتجاه الحالي، ومتابعة اليوم نفسه في docs/day-01.md للفحوص الفعلية.
+```bash
+npm run typecheck && npm run lint && npm run format:check && npm test && npm run build
+```
 
-تحديث لاحق للتصميم: بانر بعرض الصفحة مع النص من اليمين، وعناوين نسخية ونصوص بلهجة سعودية. لم تتغير بيانات المنتجات أو منطق السلة. تعذرت قراءة TikTok للمحل، لذلك ما زالت مطابقة الصور الفعلية بحاجة لصور مرجعية متاحة. التفاصيل في آخر متابعة داخل docs/day-01.md.
+- **Unit tests** cover:
+  - The mapper and runtime validation, using a saved real API response in `tests/fixtures/`.
+  - Search, filtering, sorting and non-mutation.
+  - The HTTP client with a mocked `fetch`: success, HTTP 503, bad JSON and network failure.
+  - The cart: merging, totals, persistence, corrupt storage, quantity limits and catalog retention.
+- **Browser QA:** `node scripts/browser-check.mjs`. It needs a running dev server and Chrome at its default Windows path. It checks:
+  - Layout at 360/768/1280px.
+  - Keyboard filters, combined filters and sorting.
+  - The cart flow.
+  - The form.
+  - Corrupt storage.
+  - Out-of-stock buttons.
+  - The error state when the API is blocked, and retry.
+  - Reduced motion.
 
-الحالة الحالية: Alexandria في الموقع كله، ألوان تيراكوتا للتركيز والقوائم والاختيارات، فلاتر نشطة قابلة للإزالة وقوائم محسنة بلوحة المفاتيح مع select أصلي كبديل ومصدر لبيانات النماذج. الحركات القصيرة تحترم prefers-reduced-motion، والمحتوى ظاهر افتراضيًا. التفاصيل والفحوص الفعلية في آخر متابعة من docs/day-01.md.
+  Screenshots go to the git-ignored `test-results/`.
 
-آخر تحديث للصور: استُبدلت جميع الصور المعروضة بصور المحل العشرين المرفقة من المستخدم، محفوظة في public/images/store. اثنتا عشرة للمنتجات واثنتان للبانر والتخصيص وست إضافية ضمن معرض التنسيقات. سجل الأصول في docs/store-images.json، والتوزيع من data.js. أسماء المنتجات والأسعار والخيارات ووظائف المتجر لم تتغير.
+- **Lighthouse** (production build, November 2026): Accessibility 100, Best Practices 100, SEO 92, Performance 82.
 
-الاتجاه الحالي للهوية من ملف DESIGN.md الجديد المرفق: وردي مغبر للخلفية، صور فاتحة وأسطح عاجية، وأزرار وردية عميقة بنص أبيض. كل القيم مشتركة في :root داخل src/styles.css، ولا تُستخدم لوحة التيراكوتا السابقة في الواجهة. المقاسات والوظائف وصور المحل محفوظة؛ قياس Lighthouse الجديد 100/100 لإمكانية الوصول للصفحة الرئيسية. تفاصيل التنفيذ والفحوص في آخر متابعة من docs/day-01.md.
+## Current limitations
+
+- The API catalog has no images, currency, occasions or customization options. The occasion section and the customization copy are kept from the Gift Lab design.
+- Product names and categories appear in English, as the API provides them.
+- The 12 original store product photos in `public/images/store/` are currently unused, pending Sara's decision.
+- The account form is a demo: there is no backend, and passwords are never stored.
+- The 99-per-item cart limit is a demo UI limit, not a stock policy. No payment, shipping or cancellation policies exist.
+- `npm audit` reports 11 moderate issues in development-only tooling (`minimatch` inside the ESLint dependency tree). Production dependencies have 0. They are not force-fixed across major versions.
+- `styles.css` still contains layered overrides from earlier design iterations. The rendered result is consistent, but the source could be consolidated.
+
+## Documentation
+
+- [DESIGN.md](DESIGN.md): visual direction, palette, typography and components.
+- [AGENTS.md](AGENTS.md): rules for AI coding assistants working on this repository.
+- [debugging-log.md](debugging-log.md): observed issues, causes, fixes and AI involvement.
+- [docs/](docs/): client requirements, daily notes and image sources.

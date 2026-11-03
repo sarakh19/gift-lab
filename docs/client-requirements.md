@@ -5,8 +5,8 @@ Source: `Gift_Lab_Client_Requirements_AR.docx`, client requirements draft dated 
 ## Current project decisions
 - This learning version focuses on individual customers.
 - Interface language is Arabic with RTL direction for now.
-- The project follows the instructor's Day 1 and Day 2 assignments using Vite, HTML, CSS, and vanilla JavaScript.
-- Visual identity will be decided later by Sara and recorded in `DESIGN.md`.
+- The project follows the instructor's assignments using Vite, HTML, CSS and strict TypeScript. The product catalog currently comes from the instructor's products API (see README).
+- The visual identity (dusty blush) was chosen by Sara and is recorded in `DESIGN.md`.
 
 ## Confirmed client context
 - Gift Lab is an established gift shop in Dammam, Saudi Arabia, with a physical store and recurring orders. The website is an additional sales channel.
