@@ -22,11 +22,11 @@ interface FiltersUIOptions {
 }
 
 export interface FiltersUI {
-  read(): ProductFilters;
-  reset(): void;
+  read: () => ProductFilters;
+  reset: () => void;
   // Category options come from the loaded catalog, not from a hard-coded list.
-  setCategories(categories: readonly Category[]): void;
-  onChange(listener: () => void): void;
+  setCategories: (categories: readonly Category[]) => void;
+  onChange: (listener: () => void) => void;
 }
 
 const FILTER_LABELS: Readonly<Record<FilterKey, string>> = {

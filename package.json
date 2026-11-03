@@ -21,11 +21,12 @@
     "husky": "^9.0.0",
     "lint-staged": "^16.0.0",
     "prettier": "^3.0.0",
-    "typescript": "^7.0.2",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1",
     "vite": "^8.3.5"
   },
   "lint-staged": {
-    "*.{js,mjs,css,html,json,md}": "prettier --write",
-    "*.{js,mjs}": "eslint --max-warnings 0"
+    "*.{js,mjs,ts,css,html,json,md}": "prettier --write",
+    "*.{js,mjs,ts}": "eslint --max-warnings 0"
   }
 }

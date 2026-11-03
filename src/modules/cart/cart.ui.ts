@@ -19,8 +19,8 @@ interface CartUIOptions {
 }
 
 export interface CartUI {
-  addProduct(product: Product): void;
-  setProducts(products: readonly Product[]): void;
+  addProduct: (product: Product) => void;
+  setProducts: (products: readonly Product[]) => void;
 }
 
 const EMPTY_CART_HTML =

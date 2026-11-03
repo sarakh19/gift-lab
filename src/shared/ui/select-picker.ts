@@ -10,11 +10,11 @@ interface Picker {
 }
 
 export interface Pickers {
-  enhance(select: HTMLSelectElement): void;
+  enhance: (select: HTMLSelectElement) => void;
   // Rebuilds the popup after the native <select> options change (e.g. API categories).
-  refresh(select: HTMLSelectElement): void;
-  close(restoreFocus?: boolean): void;
-  sync(): void;
+  refresh: (select: HTMLSelectElement) => void;
+  close: (restoreFocus?: boolean) => void;
+  sync: () => void;
 }
 
 // Native selects remain the form-data source and fallback; enhanced popups avoid OS colors.

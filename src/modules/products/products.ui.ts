@@ -17,8 +17,8 @@ interface ProductsUIOptions {
 }
 
 export interface ProductsUI {
-  load(): Promise<void>;
-  render(): void;
+  load: () => Promise<void>;
+  render: () => void;
 }
 
 const ERROR_MESSAGES: Readonly<Record<ApiError['kind'], string>> = {
