@@ -5,3 +5,9 @@ dist/
 coverage/
 *.log
 test-results/
+
+# Tooling caches and OS files
+.vite/
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
