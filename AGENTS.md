@@ -72,7 +72,11 @@ docs/                  # client requirements, daily notes, image sources
 2. Every form control has a visible, associated `<label>`. Use native input types and validation.
 3. Images get useful `alt` text; decorative elements get empty `alt` or `aria-hidden`. An accessible name must contain the visible text.
 4. Keyboard access and visible focus everywhere. Respect `prefers-reduced-motion`.
-5. Mobile-first CSS with `min-width` queries only (768px, 1280px). No max-width queries and no `!important`. Check 360, 768 and 1280px with no horizontal overflow.
+5. Mobile-first CSS with `min-width` queries only (768px, 1280px). No max-width queries and no `!important`.
+   - **360px is the smallest supported width.** At 360px the page must never scroll sideways: `document.documentElement.scrollWidth` must not exceed `innerWidth`.
+   - Nothing may have a fixed width larger than its container. Use `max-width: 100%` on images and media, `min-width: 0` on grid and flex children that hold text, and `overflow-wrap: anywhere` for long product names or emails.
+   - Never hide overflow with `overflow-x: hidden` on `body` or `html`. Find and fix the element that is too wide.
+   - After every layout change, run `scripts/browser-check.mjs`. It measures `scrollWidth` at 360, 768 and 1280px, and you must look at `test-results/width-360.png` yourself.
 6. Use Flexbox for one-dimensional layouts and Grid for product and page layouts.
 7. Render lists with `map().join('')` and escape every string from data with `escapeHTML`. Use event delegation for repeated controls.
 8. Sort a copy, never the source array.

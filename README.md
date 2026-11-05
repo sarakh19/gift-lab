@@ -11,7 +11,8 @@ An Arabic, right-to-left storefront for Gift Lab, a gift shop in Dammam (gifts, 
 - **Sorting** by price, ascending or descending. Sorting works on a copy, so the catalog is never mutated.
 - **Cart:**
   - Add available products directly; out-of-stock products have a disabled button.
-  - Change the quantity (1–99), remove items, and see the item count and total.
+  - Change the quantity (1–99), remove items, and see the item count and total. Pressing "−" at quantity 1 removes the item.
+  - Empty the whole cart with "تفريغ السلة" (shown only when the cart has items).
   - The cart is saved in `localStorage` and survives refreshes. Corrupt or outdated saved data is ignored safely.
 - **Demo registration form.** It uses native HTML validation only. Nothing is sent to a server or stored.
 - **Responsive and accessible.** The layout is mobile-first (360 / 768 / 1280px), keyboard-operable custom selects keep a native `<select>` fallback, and the page respects reduced-motion settings.
@@ -91,7 +92,7 @@ src/
     ├── cart/
     │   ├── cart.types.ts         # CartItem, Cart, CartState, CartStore
     │   ├── cart.logic.ts         # sanitizeCart, cartTotals
-    │   ├── cart.state.ts         # store + localStorage persistence
+    │   ├── cart.state.ts         # store (add, change, decrease, remove, clear) + localStorage
     │   └── cart.ui.ts            # cart dialog
     ├── home/                     # brand photography (not the catalog)
     └── account/                  # demo registration form
@@ -141,7 +142,7 @@ npm run typecheck && npm run lint && npm run format:check && npm test && npm run
   - Search, filtering, sorting and non-mutation.
   - The HTTP client with a mocked `fetch`: success, HTTP 500, bad JSON, network failure and a stalled (slow) response hitting the timeout.
   - `loadedState`: an empty API catalog versus a loaded one.
-  - The cart: merging, totals, persistence, corrupt storage, quantity limits and catalog retention.
+  - The cart: merging, totals, persistence, corrupt storage, quantity limits, catalog retention, decrease-to-remove and clearing.
 - **Browser QA:** `node scripts/browser-check.mjs`. It needs a running dev server and Chrome at its default Windows path. It checks:
   - Layout at 360/768/1280px.
   - Keyboard filters, combined filters and sorting.
