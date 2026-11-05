@@ -450,8 +450,45 @@ try {
       'new Intl.NumberFormat("ar-SA",{minimumFractionDigits:2,maximumFractionDigits:2}).format(49)',
     ),
   );
+  // Instructor feedback: "−" at quantity 1 must remove the product.
+  assert.equal(
+    await evaluate('document.querySelector("[data-action=decrease]").disabled'),
+    false,
+  );
+  await evaluate('document.querySelector("[data-action=decrease]").click()');
+  assert.equal(
+    await evaluate('document.querySelectorAll(".cart-row").length'),
+    0,
+  );
+  assert.equal(
+    await evaluate('document.querySelector("#cart-clear").hidden'),
+    true,
+  );
+  await add(1);
+  await add(2);
+  assert.equal(
+    await evaluate('document.querySelector("#cart-clear").hidden'),
+    false,
+  );
+  await pause(300);
+  const cartImage = await cdp('Page.captureScreenshot', { format: 'png' });
+  await writeFile(
+    resolve(output, 'cart-dialog.png'),
+    Buffer.from(cartImage.data, 'base64'),
+  );
+  await evaluate('document.querySelector("#cart-clear").click()');
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '0',
+  );
+  assert.equal(
+    await evaluate(
+      'JSON.parse(localStorage.getItem("giftlab.cart.v1")).length',
+    ),
+    0,
+  );
   results.push(
-    'Cart merge by product, persistence, quantity controls, removal and total',
+    'Cart merge by product, persistence, quantity controls, removal, decrease-to-remove, clear cart and total',
   );
   await cdp('Input.dispatchKeyEvent', {
     type: 'keyDown',

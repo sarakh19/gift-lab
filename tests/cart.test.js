@@ -95,3 +95,23 @@ test('quantity limits and catalog retention', () => {
   assert.deepEqual(store.snapshot().cart, [{ productId: 1, quantity: 99 }]);
   assert.match(store.snapshot().storageMessage, /لم تعد موجودة/);
 });
+
+test('decreasing at quantity 1 removes the product, and clear empties the cart', () => {
+  const storage = memory();
+  const store = createCartStore(storage);
+  store.add(1);
+  store.add(1);
+  store.add(2);
+  store.decrease(1);
+  assert.deepEqual(store.snapshot().cart, [
+    { productId: 1, quantity: 1 },
+    { productId: 2, quantity: 1 },
+  ]);
+  store.decrease(1);
+  assert.deepEqual(store.snapshot().cart, [{ productId: 2, quantity: 1 }]);
+  store.decrease(99);
+  assert.equal(store.snapshot().cart.length, 1);
+  store.clear();
+  assert.deepEqual(store.snapshot().cart, []);
+  assert.deepEqual(createCartStore(storage).snapshot().cart, []);
+});

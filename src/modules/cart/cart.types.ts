@@ -24,7 +24,11 @@ export interface CartStore {
   snapshot(): CartState;
   add(productId: number): boolean;
   change(productId: number, quantity: number): void;
+  // Lowers the quantity by one; at quantity 1 the product leaves the cart.
+  decrease(productId: number): void;
   remove(productId: number): void;
+  // Empties the whole cart.
+  clear(): void;
   // Drops saved rows whose product is no longer in the loaded catalog.
   retain(productIds: ReadonlySet<number>): void;
 }

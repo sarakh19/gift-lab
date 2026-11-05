@@ -44,8 +44,19 @@ export function createCartStore(storage: CartStorage): CartStore {
       );
       persist();
     },
+    decrease(productId) {
+      const row = cart.find((item) => item.productId === productId);
+      if (!row) return;
+      if (row.quantity > 1) row.quantity -= 1;
+      else cart = cart.filter((item) => item.productId !== productId);
+      persist();
+    },
     remove(productId) {
       cart = cart.filter((row) => row.productId !== productId);
+      persist();
+    },
+    clear() {
+      cart = [];
       persist();
     },
     retain(productIds) {

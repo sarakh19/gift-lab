@@ -30,7 +30,7 @@ const WAITING_FOR_CATALOG_HTML =
 
 const cartRowHTML = (row: CartItem, index: number, product: Product) => {
   const name = escapeHTML(product.name);
-  return `<article class="cart-row" data-index="${index}"><h3 dir="auto">${name}</h3><p dir="auto">${escapeHTML(product.category)}</p><div class="quantity"><button class="quiet" data-action="decrease" aria-label="تقليل كمية ${name}" ${row.quantity === 1 ? 'disabled' : ''}>−</button><label for="quantity-${index}">الكمية</label><input id="quantity-${index}" data-action="quantity" type="number" min="1" max="${MAX_QUANTITY}" step="1" value="${row.quantity}" required /><button class="quiet" data-action="increase" aria-label="زيادة كمية ${name}" ${row.quantity === MAX_QUANTITY ? 'disabled' : ''}>+</button><button class="quiet remove" data-action="remove">حذف</button><strong>${formatPrice(product.priceCents * row.quantity)}</strong></div></article>`;
+  return `<article class="cart-row" data-index="${index}"><h3 dir="auto">${name}</h3><p dir="auto">${escapeHTML(product.category)}</p><div class="quantity"><button class="quiet" data-action="decrease" aria-label="${row.quantity === 1 ? `حذف ${name} من السلة` : `تقليل كمية ${name}`}">−</button><label for="quantity-${index}">الكمية</label><input id="quantity-${index}" data-action="quantity" type="number" min="1" max="${MAX_QUANTITY}" step="1" value="${row.quantity}" required /><button class="quiet" data-action="increase" aria-label="زيادة كمية ${name}" ${row.quantity === MAX_QUANTITY ? 'disabled' : ''}>+</button><button class="quiet remove" data-action="remove">حذف</button><strong>${formatPrice(product.priceCents * row.quantity)}</strong></div></article>`;
 };
 
 export function initCartUI({ store, motion, toaster }: CartUIOptions): CartUI {
@@ -40,6 +40,7 @@ export function initCartUI({ store, motion, toaster }: CartUIOptions): CartUI {
   const cartItems = byId('cart-items', HTMLElement);
   const cartOpen = byId('cart-open', HTMLButtonElement);
   const cartDialog = byId('cart-dialog', HTMLDialogElement);
+  const cartClear = byId('cart-clear', HTMLButtonElement);
   let products: readonly Product[] = [];
   let catalogLoaded = false;
 
@@ -49,6 +50,7 @@ export function initCartUI({ store, motion, toaster }: CartUIOptions): CartUI {
     cartCount.textContent = String(total.count);
     cartTotal.textContent = formatPrice(total.amountCents);
     storageStatus.textContent = storageMessage;
+    cartClear.hidden = !cart.length;
     if (!cart.length) {
       cartItems.innerHTML = EMPTY_CART_HTML;
       return;
@@ -79,11 +81,8 @@ export function initCartUI({ store, motion, toaster }: CartUIOptions): CartUI {
     if (index === undefined || !row) return;
     const action = button.dataset.action;
     if (action === 'remove') store.remove(row.productId);
-    else
-      store.change(
-        row.productId,
-        row.quantity + (action === 'increase' ? 1 : -1),
-      );
+    else if (action === 'decrease') store.decrease(row.productId);
+    else store.change(row.productId, row.quantity + 1);
     renderCart();
     // Re-rendering replaces buttons: restore keyboard focus to the nearby row.
     const nextButton = cartItems.querySelector(
@@ -108,6 +107,12 @@ export function initCartUI({ store, motion, toaster }: CartUIOptions): CartUI {
     store.change(row.productId, Number(input.value));
     renderCart();
     focusIfPossible(document.getElementById(`quantity-${index}`));
+  });
+  cartClear.addEventListener('click', () => {
+    store.clear();
+    renderCart();
+    toaster.success('تم تفريغ السلة');
+    focusIfPossible(cartDialog.querySelector('[data-close]'));
   });
   cartOpen.addEventListener('click', () => cartDialog.showModal());
   cartDialog.addEventListener('close', () => cartOpen.focus());
