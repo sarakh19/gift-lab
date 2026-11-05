@@ -30,7 +30,7 @@ export async function getJson<T>(
 ): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(url, {
+    response = await fetch(`https://shopboard-api.vercel.app/api${url}`, {
       headers: { Accept: 'application/json' },
       signal: AbortSignal.timeout(timeoutMs),
     });

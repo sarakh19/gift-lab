@@ -7,7 +7,7 @@ import type {
   Product,
 } from './products.types.ts';
 
-export const PRODUCTS_URL = 'https://shopboard-api.vercel.app/api/products';
+export const PRODUCTS_URL = '/products';
 
 const isNonNegativeInteger = (value: unknown): value is number =>
   typeof value === 'number' && Number.isInteger(value) && value >= 0;

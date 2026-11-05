@@ -5,8 +5,8 @@ import {
   focusIfPossible,
 } from '../../shared/dom.ts';
 import { findById } from '../../shared/validation.ts';
-import type { Notify } from '../notifications/notifications.ui.ts';
 import type { Motion } from '../../shared/ui/motion.ts';
+import type { Toaster } from '../../shared/ui/toast.ts';
 import { formatPrice } from '../products/products.logic.ts';
 import type { Product } from '../products/products.types.ts';
 import { cartTotals, MAX_QUANTITY } from './cart.logic.ts';
@@ -15,7 +15,7 @@ import type { CartItem, CartStore } from './cart.types.ts';
 interface CartUIOptions {
   store: CartStore;
   motion: Motion;
-  notify: Notify;
+  toaster: Toaster;
 }
 
 export interface CartUI {
@@ -33,7 +33,7 @@ const cartRowHTML = (row: CartItem, index: number, product: Product) => {
   return `<article class="cart-row" data-index="${index}"><h3 dir="auto">${name}</h3><p dir="auto">${escapeHTML(product.category)}</p><div class="quantity"><button class="quiet" data-action="decrease" aria-label="تقليل كمية ${name}" ${row.quantity === 1 ? 'disabled' : ''}>−</button><label for="quantity-${index}">الكمية</label><input id="quantity-${index}" data-action="quantity" type="number" min="1" max="${MAX_QUANTITY}" step="1" value="${row.quantity}" required /><button class="quiet" data-action="increase" aria-label="زيادة كمية ${name}" ${row.quantity === MAX_QUANTITY ? 'disabled' : ''}>+</button><button class="quiet remove" data-action="remove">حذف</button><strong>${formatPrice(product.priceCents * row.quantity)}</strong></div></article>`;
 };
 
-export function initCartUI({ store, motion, notify }: CartUIOptions): CartUI {
+export function initCartUI({ store, motion, toaster }: CartUIOptions): CartUI {
   const cartCount = byId('cart-count', HTMLElement);
   const cartTotal = byId('cart-total', HTMLElement);
   const storageStatus = byId('storage-status', HTMLElement);
@@ -115,23 +115,29 @@ export function initCartUI({ store, motion, notify }: CartUIOptions): CartUI {
 
   return {
     addProduct(product) {
+      const previousMessage = store.snapshot().storageMessage;
       const success = store.add(product.id);
       renderCart();
-      if (success)
-        motion.play(
-          cartCount,
-          [
-            { transform: 'scale(1)' },
-            { transform: 'scale(1.18)' },
-            { transform: 'scale(1)' },
-          ],
-          200,
+      if (!success) {
+        toaster.error(
+          `تعذّرت الإضافة: الحد الأقصى ${MAX_QUANTITY} قطعة لكل منتج.`,
         );
-      notify(
-        success
-          ? 'تمّت الإضافة، هديتك صارت في السلة'
-          : `يمكن إدخال حتى ${MAX_QUANTITY} قطعة لكل منتج.`,
+        return;
+      }
+      motion.play(
+        cartCount,
+        [
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.18)' },
+          { transform: 'scale(1)' },
+        ],
+        200,
       );
+      toaster.success(`تمّت إضافة ${product.name} إلى السلة`);
+      // Added in memory, but saving to localStorage failed (blocked or full).
+      const { storageMessage } = store.snapshot();
+      if (storageMessage && storageMessage !== previousMessage)
+        toaster.error(storageMessage);
     },
     setProducts(nextProducts) {
       products = nextProducts;

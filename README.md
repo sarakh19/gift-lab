@@ -4,7 +4,8 @@ An Arabic, right-to-left storefront for Gift Lab, a gift shop in Dammam (gifts, 
 
 ## Features
 
-- **Product catalog from an API.** The catalog has loading, error (with retry), empty and success states.
+- **Product catalog from an API.** The catalog has four load states: skeleton cards while loading, an error with a "try again" button, an empty-API message (distinct from "no filter matches"), and success.
+- **Toasts.** Stacking, auto-dismissing toasts in an `aria-live` region: a success toast when a product is added to the cart, and an error toast when an action fails (item limit reached, or the cart could not be saved).
 - **Search.** It is Arabic-aware: it ignores diacritics and tatweel, and unifies alef forms. It matches on product name and category.
 - **Filters.** Category options are built from the API data. The occasion filter has one-tap occasion circles and removable active-filter chips.
 - **Sorting** by price, ascending or descending. Sorting works on a copy, so the catalog is never mutated.
@@ -74,13 +75,14 @@ src/
 │   └── ui/
 │       ├── select-picker.ts      # accessible custom selects over native <select>
 │       ├── motion.ts             # animations that respect reduced motion
-│       └── dialogs.ts            # shared <dialog> close behavior
+│       ├── dialogs.ts            # shared <dialog> close behavior
+│       └── toast.ts              # stacking, auto-dismissing aria-live toasts
 └── modules/
     ├── products/
-    │   ├── products.types.ts     # ApiProduct, Product, Category, Occasion, ProductsState
+    │   ├── products.types.ts     # ApiProduct, Product, Category, Occasion, LoadState
     │   ├── products.api.ts       # runtime validation + fetchProducts()
     │   ├── products.mapper.ts    # ApiProduct -> Product
-    │   ├── products.logic.ts     # formatPrice, listCategories
+    │   ├── products.logic.ts     # formatPrice, listCategories, loadedState
     │   └── products.ui.ts        # catalog rendering and request states
     ├── filters/
     │   ├── filters.types.ts      # ProductFilters, FilterKey, SortOrder
@@ -91,8 +93,6 @@ src/
     │   ├── cart.logic.ts         # sanitizeCart, cartTotals
     │   ├── cart.state.ts         # store + localStorage persistence
     │   └── cart.ui.ts            # cart dialog
-    ├── notifications/
-    │   └── notifications.ui.ts   # toast in a live region
     ├── home/                     # brand photography (not the catalog)
     └── account/                  # demo registration form
 ```
@@ -139,7 +139,8 @@ npm run typecheck && npm run lint && npm run format:check && npm test && npm run
 - **Unit tests** cover:
   - The mapper and runtime validation, using a saved real API response in `tests/fixtures/`.
   - Search, filtering, sorting and non-mutation.
-  - The HTTP client with a mocked `fetch`: success, HTTP 503, bad JSON and network failure.
+  - The HTTP client with a mocked `fetch`: success, HTTP 500, bad JSON, network failure and a stalled (slow) response hitting the timeout.
+  - `loadedState`: an empty API catalog versus a loaded one.
   - The cart: merging, totals, persistence, corrupt storage, quantity limits and catalog retention.
 - **Browser QA:** `node scripts/browser-check.mjs`. It needs a running dev server and Chrome at its default Windows path. It checks:
   - Layout at 360/768/1280px.
@@ -149,6 +150,8 @@ npm run typecheck && npm run lint && npm run format:check && npm test && npm run
   - Corrupt storage.
   - Out-of-stock buttons.
   - The error state when the API is blocked, and retry.
+  - API responses intercepted with the Chrome Fetch domain: a slow response (skeletons and `aria-busy`), HTTP 500 (error state; a failed retry keeps focus on the button; a successful retry recovers), and an empty response.
+  - Toasts: stacking, auto-dismissal, and the error toast at the item limit.
   - Reduced motion.
 
   Screenshots go to the git-ignored `test-results/`.

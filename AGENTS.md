@@ -29,12 +29,11 @@ src/
 │   ├── api/client.ts  # getJson<T>, ApiError — fetch, HTTP and JSON errors
 │   ├── validation.ts  # isRecord, isPositiveInteger, findById<T>
 │   ├── dom.ts         # byId, requireElement, closestFromEvent, escapeHTML
-│   └── ui/            # select-picker, motion, dialogs
+│   └── ui/            # select-picker, motion, dialogs, toast (stacking aria-live toasts)
 └── modules/
     ├── products/      # types, api (validation), mapper, logic, ui (request states)
     ├── filters/       # types, logic (parse/filter/sort), ui (form, chips, occasions)
     ├── cart/          # types, logic, state (localStorage), ui
-    ├── notifications/ # toast notifier
     ├── home/          # brand photography (not the catalog)
     └── account/       # demo registration form
 tests/                 # node --test unit tests (+ fixtures/)
@@ -62,7 +61,7 @@ docs/                  # client requirements, daily notes, image sources
 - No `any`. No `as` assertions (this includes `as const`). No non-null `!`. No `@ts-ignore`, `@ts-expect-error` or `@ts-nocheck`. ESLint enforces all of these in `src/`.
 - External data (API responses, `localStorage`, `JSON.parse`, `FormData`) is `unknown` until a type guard has validated it.
 - Narrow DOM values with `instanceof`. Use `byId(id, HTMLFormElement)`; never `querySelector<T>()`, because the generic type argument is an unchecked cast.
-- Use discriminated unions for request states (`ProductsState`).
+- Use discriminated unions for request states (`LoadState` in `products.types.ts`).
 - Use `import type` for type-only imports.
 - Declare callback members of interfaces as function properties (`read: () => X`), so they can be passed around safely.
 - Write code, identifiers, comments, file names, documentation and commit messages in English. Only user-facing UI text is Arabic.

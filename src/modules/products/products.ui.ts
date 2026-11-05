@@ -1,12 +1,17 @@
 import { ApiError } from '../../shared/api/client.ts';
-import { byId, closestFromEvent, escapeHTML } from '../../shared/dom.ts';
+import {
+  byId,
+  closestFromEvent,
+  escapeHTML,
+  focusIfPossible,
+} from '../../shared/dom.ts';
 import { findById } from '../../shared/validation.ts';
 import type { Motion } from '../../shared/ui/motion.ts';
 import { filterProducts } from '../filters/filters.logic.ts';
 import type { ProductFilters } from '../filters/filters.types.ts';
 import { fetchProducts } from './products.api.ts';
-import { formatPrice } from './products.logic.ts';
-import type { Product, ProductsState } from './products.types.ts';
+import { formatPrice, loadedState } from './products.logic.ts';
+import type { LoadState, Product } from './products.types.ts';
 
 interface ProductsUIOptions {
   motion: Motion;
@@ -42,15 +47,20 @@ const productCardHTML = (product: Product): string => {
   return `<article class="product-card"><div class="product-art product-art--placeholder"><p>لا توجد صورة من مصدر البيانات</p></div><div class="product-content"><p class="product-category" dir="auto">${escapeHTML(product.category)}</p><h3 dir="auto">${name}</h3><p>${product.inStock ? 'متوفر' : 'غير متوفر حاليًا'}</p><div class="product-bottom"><div><strong>${formatPrice(product.priceCents)}</strong></div>${action}</div></div></article>`;
 };
 
+// Placeholder cards with the same layout as real cards, so nothing jumps when data arrives.
+// Hidden from assistive tech; the results-count status announces "loading" instead.
+const SKELETON_CARD_COUNT = 8;
+const SKELETON_CARD_HTML =
+  '<div class="product-card skeleton-card" aria-hidden="true"><div class="product-art skeleton"></div><div class="product-content"><span class="skeleton skeleton-line skeleton-line--short"></span><span class="skeleton skeleton-line"></span><span class="skeleton skeleton-line skeleton-line--short"></span><div class="product-bottom"><span class="skeleton skeleton-line skeleton-line--price"></span><span class="skeleton skeleton-button"></span></div></div></div>';
+
 const STATE_HTML = {
-  loading:
-    '<div class="empty"><h3>جارٍ تحميل المنتجات…</h3><p>لحظات ونعرض لك المنتجات.</p></div>',
+  loading: SKELETON_CARD_HTML.repeat(SKELETON_CARD_COUNT),
   empty:
     '<div class="empty"><h3>لا توجد منتجات حاليًا</h3><p>مصدر البيانات لم يُرجع أي منتج.</p></div>',
   noMatches:
     '<div class="empty"><h3>ما لقينا هدية بهالاختيارات</h3><p>جرّبي كلمة ثانية أو امسحي الفلاتر وشوفي كل الهدايا.</p><button class="quiet" data-reset>عرض كل الهدايا</button></div>',
   error: (message: string) =>
-    `<div class="empty"><h3>تعذّر تحميل المنتجات</h3><p>${escapeHTML(message)}</p><button class="quiet" data-retry>إعادة المحاولة</button></div>`,
+    `<div class="empty" role="alert"><h3>تعذّر تحميل المنتجات</h3><p>${escapeHTML(message)}</p><button class="button" data-retry>حاولي مرة ثانية <span aria-hidden="true">↻</span></button></div>`,
 };
 
 const FADE_IN_MS = 140;
@@ -64,10 +74,10 @@ export function initProductsUI({
 }: ProductsUIOptions): ProductsUI {
   const resultsCount = byId('results-count', HTMLElement);
   const productGrid = byId('products', HTMLElement);
-  let state: ProductsState = { status: 'loading' };
+  let state: LoadState = { status: 'loading' };
   let renderedProducts = false;
 
-  // One render function for all four request states.
+  // One render function for all four load states.
   const render = () => {
     productGrid.setAttribute('aria-busy', String(state.status === 'loading'));
     switch (state.status) {
@@ -76,7 +86,8 @@ export function initProductsUI({
         productGrid.innerHTML = STATE_HTML.loading;
         break;
       case 'error':
-        resultsCount.textContent = 'تعذّر تحميل المنتجات.';
+        // The panel itself is role="alert"; an extra status message would be read twice.
+        resultsCount.textContent = '';
         productGrid.innerHTML = STATE_HTML.error(state.message);
         break;
       case 'empty':
@@ -99,7 +110,7 @@ export function initProductsUI({
       }
     }
   };
-  const setState = (next: ProductsState) => {
+  const setState = (next: LoadState) => {
     state = next;
     render();
   };
@@ -115,14 +126,19 @@ export function initProductsUI({
       return;
     }
     onCatalogLoaded(products);
-    setState(
-      products.length ? { status: 'success', products } : { status: 'empty' },
-    );
+    setState(loadedState(products));
+  };
+  // The retry button is replaced while loading; if the retry fails again, put
+  // keyboard focus back on the new retry button instead of losing it.
+  const retry = async () => {
+    await load();
+    if (state.status === 'error')
+      focusIfPossible(productGrid.querySelector('[data-retry]'));
   };
 
   productGrid.addEventListener('click', (event) => {
     if (closestFromEvent(event, '[data-retry]')) {
-      void load();
+      void retry();
       return;
     }
     if (closestFromEvent(event, '[data-reset]')) {

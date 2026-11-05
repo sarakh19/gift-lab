@@ -30,6 +30,14 @@ let serial = 0;
 const pending = new Map();
 const errors = [];
 const results = [];
+// Products API interception (Chrome Fetch domain): 'pass' | 'slow' | 'http500' | 'empty'.
+let apiMode = 'pass';
+const API_DELAY_MS = 2500;
+const corsHeaders = [
+  { name: 'Access-Control-Allow-Origin', value: '*' },
+  { name: 'Content-Type', value: 'application/json' },
+];
+let onRequestPaused = () => {};
 const pause = (time) => new Promise((done) => setTimeout(done, time));
 try {
   let pages;
@@ -58,7 +66,9 @@ try {
       pending.delete(message.id);
       if (message.error) handlers.reject(Error(JSON.stringify(message.error)));
       else handlers.resolve(message.result);
-    } else if (message.method === 'Runtime.exceptionThrown')
+    } else if (message.method === 'Fetch.requestPaused')
+      onRequestPaused(message.params);
+    else if (message.method === 'Runtime.exceptionThrown')
       errors.push(message.params.exceptionDetails.text);
   });
   const cdp = (method, params = {}) =>
@@ -524,6 +534,143 @@ try {
   await waitFor('document.querySelectorAll(".product-card").length === 12');
   results.push(
     'Out-of-stock items disabled; blocked API shows error state; retry loads the catalog',
+  );
+  const fulfill = (requestId, responseCode, body) =>
+    cdp('Fetch.fulfillRequest', {
+      requestId,
+      responseCode,
+      responseHeaders: corsHeaders,
+      body: Buffer.from(body).toString('base64'),
+    });
+  onRequestPaused = async ({ requestId }) => {
+    if (apiMode === 'http500')
+      return fulfill(requestId, 500, '{"error":"server"}');
+    if (apiMode === 'empty')
+      return fulfill(requestId, 200, '{"items":[],"total":0}');
+    if (apiMode === 'slow') await pause(API_DELAY_MS);
+    return cdp('Fetch.continueRequest', { requestId });
+  };
+  await cdp('Fetch.enable', {
+    patterns: [{ urlPattern: '*shopboard-api.vercel.app/api/products*' }],
+  });
+  const reloadPage = async () => {
+    await evaluate('document.documentElement.dataset.oldDocument="yes"');
+    await cdp('Page.reload');
+    await waitFor('!document.documentElement.dataset.oldDocument');
+  };
+  // Slow network: skeleton cards and aria-busy while waiting, then the catalog.
+  apiMode = 'slow';
+  await reloadPage();
+  await waitFor('document.querySelectorAll(".skeleton-card").length === 8');
+  assert.equal(
+    await evaluate(
+      'document.querySelector("#products").getAttribute("aria-busy")',
+    ),
+    'true',
+  );
+  const skeletonImage = await cdp('Page.captureScreenshot', { format: 'png' });
+  await writeFile(
+    resolve(output, 'products-loading.png'),
+    Buffer.from(skeletonImage.data, 'base64'),
+  );
+  await waitFor(
+    'document.querySelectorAll(".product-card:not(.skeleton-card)").length === 12',
+  );
+  assert.equal(
+    await evaluate(
+      'document.querySelector("#products").getAttribute("aria-busy")',
+    ),
+    'false',
+  );
+  // HTTP 500: error state with a working "try again" button.
+  apiMode = 'http500';
+  await reloadPage();
+  await waitFor('document.querySelector("[data-retry]")');
+  assert.equal(
+    await evaluate(
+      'document.querySelector("#products [role=alert] p").textContent',
+    ),
+    'الخادم لم يُرجع المنتجات بنجاح.',
+  );
+  // Retry that fails again keeps keyboard focus on the new retry button.
+  await evaluate('document.querySelector("[data-retry]").click()');
+  await waitFor(
+    'document.activeElement && document.activeElement.matches("[data-retry]")',
+  );
+  apiMode = 'pass';
+  await evaluate('document.querySelector("[data-retry]").click()');
+  await waitFor('document.querySelectorAll(".product-card").length === 12');
+  // Empty API response: its own message, distinct from "no matches" (no reset button).
+  apiMode = 'empty';
+  await reloadPage();
+  await waitFor('document.querySelector("#products .empty h3")');
+  assert.equal(
+    await evaluate('document.querySelector("#products .empty h3").textContent'),
+    'لا توجد منتجات حاليًا',
+  );
+  assert.equal(
+    await evaluate('Boolean(document.querySelector("[data-reset]"))'),
+    false,
+  );
+  const emptyImage = await cdp('Page.captureScreenshot', { format: 'png' });
+  await writeFile(
+    resolve(output, 'products-empty.png'),
+    Buffer.from(emptyImage.data, 'base64'),
+  );
+  apiMode = 'pass';
+  await cdp('Fetch.disable');
+  await reloadPage();
+  await waitFor('document.querySelectorAll(".product-card").length === 12');
+  results.push(
+    'Slow API shows 8 skeleton cards (aria-busy); HTTP 500 error, failed retry keeps focus, retry recovers; empty API differs from no matches',
+  );
+  // Toasts: success toasts stack, then disappear; hitting the limit shows an error toast.
+  await evaluate('localStorage.clear()');
+  await reloadPage();
+  await waitFor('document.querySelectorAll(".product-card").length === 12');
+  await evaluate(
+    `document.querySelector('[data-product="1"]').click();document.querySelector('[data-product="2"]').click()`,
+  );
+  assert.equal(
+    await evaluate(
+      'document.querySelectorAll("#toast-region .toast--success").length',
+    ),
+    2,
+  );
+  assert.equal(
+    await evaluate(
+      'document.querySelector("#toast-region").getAttribute("aria-live")',
+    ),
+    'polite',
+  );
+  await pause(300); // let the 200ms entrance animation finish
+  const toastImage = await cdp('Page.captureScreenshot', { format: 'png' });
+  await writeFile(
+    resolve(output, 'toasts.png'),
+    Buffer.from(toastImage.data, 'base64'),
+  );
+  await waitFor(
+    'document.querySelectorAll("#toast-region .toast").length === 0',
+  );
+  await evaluate(
+    'localStorage.setItem("giftlab.cart.v1", JSON.stringify([{productId:1,quantity:99}]))',
+  );
+  await reloadPage();
+  await waitFor('document.querySelectorAll(".product-card").length === 12');
+  await evaluate(`document.querySelector('[data-product="1"]').click()`);
+  assert.equal(
+    await evaluate(
+      'document.querySelectorAll("#toast-region .toast--error").length',
+    ),
+    1,
+  );
+  assert.equal(
+    await evaluate('document.querySelector("#cart-count").textContent'),
+    '99',
+  );
+  await evaluate('localStorage.clear()');
+  results.push(
+    'Toasts: success toasts stack and auto-dismiss; failed add shows an error toast',
   );
   await cdp('Emulation.setEmulatedMedia', {
     features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],

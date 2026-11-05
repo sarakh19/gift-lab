@@ -38,8 +38,11 @@ export interface Product {
   occasions: readonly Occasion[];
 }
 
-// Request state for the catalog. `status` tells TypeScript which fields exist.
-export type ProductsState =
+// Load state of the catalog request: a discriminated union on `status`.
+// Checking `status` tells TypeScript which fields exist (e.g. `products` only on success).
+// 'empty' means the API returned zero products; zero *filter matches* is a
+// success state whose filtered list happens to be empty.
+export type LoadState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
   | { status: 'empty' }

@@ -10,6 +10,7 @@ import { mapApiProduct } from '../src/modules/products/products.mapper.ts';
 import {
   formatPrice,
   listCategories,
+  loadedState,
 } from '../src/modules/products/products.logic.ts';
 import {
   filterProducts,
@@ -107,13 +108,13 @@ test('HTTP client: success, HTTP error, bad JSON and network failure', async () 
     async () => assert.equal((await fetchProducts()).length, 12),
   );
   await withFetch(
-    async () => new Response('down', { status: 503 }),
+    async () => new Response('down', { status: 500 }),
     () =>
       assert.rejects(fetchProducts(), (error) => {
         return (
           error instanceof ApiError &&
           error.kind === 'http' &&
-          error.status === 503
+          error.status === 500
         );
       }),
   );
@@ -134,5 +135,31 @@ test('HTTP client: success, HTTP error, bad JSON and network failure', async () 
         fetchProducts(),
         (error) => error instanceof ApiError && error.kind === 'network',
       ),
+  );
+});
+
+test('slow response: the client aborts after its timeout instead of hanging', async () => {
+  // A fake fetch that never answers on its own, like a stalled network.
+  const stalledFetch = (_url, { signal }) =>
+    new Promise((_resolve, reject) =>
+      signal.addEventListener('abort', () => reject(signal.reason)),
+    );
+  await withFetch(stalledFetch, () =>
+    assert.rejects(
+      getJson('https://example.test', (data) => data, 50),
+      (error) => error instanceof ApiError && error.kind === 'timeout',
+    ),
+  );
+});
+
+test('load state: an empty API catalog is "empty", any products are "success"', () => {
+  assert.deepEqual(loadedState([]), { status: 'empty' });
+  const state = loadedState(products);
+  assert.equal(state.status, 'success');
+  assert.equal(state.products.length, 12);
+  // Zero filter matches is still a success state; the UI shows "no matches".
+  assert.equal(
+    filterProducts(products, { search: 'nothing-matches' }).length,
+    0,
   );
 });

@@ -1,5 +1,5 @@
 // Pure product functions: no DOM, no fetch, no localStorage.
-import type { Category, Product } from './products.types.ts';
+import type { Category, LoadState, Product } from './products.types.ts';
 
 const CENTS_PER_UNIT = 100;
 
@@ -15,3 +15,7 @@ export const formatPrice = (cents: number): string =>
 export const listCategories = (products: readonly Product[]): Category[] => [
   ...new Set(products.map((product) => product.category)),
 ];
+
+// The state after a successful request: an empty API catalog is its own state.
+export const loadedState = (products: readonly Product[]): LoadState =>
+  products.length ? { status: 'success', products } : { status: 'empty' };

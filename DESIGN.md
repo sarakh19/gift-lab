@@ -91,14 +91,22 @@ All buttons are real `<button>` elements. Navigation uses `<a>`.
 
 ## Catalog states
 
-Loading, error, empty and "no matches" all reuse one pale-blush panel (`.empty`, 8px radius, `--secondary`), so every state looks consistent:
+- **Loading:** 8 skeleton cards with the same layout as real cards (image area, text lines, price and button), in `--secondary` with a soft `--surface` shimmer. The shimmer is turned off under reduced motion. The skeletons are `aria-hidden`; the results line announces "جارٍ تحميل المنتجات…", and the grid has `aria-busy="true"`.
 
-- **Loading:** "جارٍ تحميل المنتجات…", and the grid has `aria-busy="true"`.
-- **Error:** message plus a quiet "إعادة المحاولة" (retry) button.
+Error, empty and "no matches" reuse one pale-blush panel (`.empty`, 8px radius, `--secondary`):
+
+- **Error:** a `role="alert"` panel with the message and a primary "حاولي مرة ثانية ↻" (try again) button. If a retry fails again, focus returns to the new button.
 - **Empty (API returned no products):** an explanatory message.
 - **No matches (filters):** a message plus a "عرض كل الهدايا" reset button.
 
-Cart feedback appears in a toast (`--secondary`, `--line` border, 8px radius, soft shadow) inside a `role="status"` live region.
+## Toasts
+
+Feedback appears in stacking toasts inside an `aria-live="polite"` region:
+- **Position:** bottom-center on mobile; bottom inline-end on 768px and up.
+- **Look:** ivory `--surface` card, `--line` border, a 4px `--accent` edge on the inline-start side, 8px radius, soft shadow, and a round ✓ icon.
+- **Error toasts:** `--secondary` background, with `--accent-hover` for the edge and the "!" icon.
+- **Motion:** they enter with a 200ms rise and fade, and leave with a 200ms fade; both are disabled under reduced motion.
+- **Lifetime:** success toasts stay 3.5s and errors 6s. At most 3 are visible; the oldest leaves first.
 
 ## Responsive behavior
 

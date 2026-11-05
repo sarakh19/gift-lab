@@ -538,23 +538,6 @@ dialog .button {
 .empty p {
   font-size: 0.85rem;
 }
-.toast {
-  position: fixed;
-  bottom: 1rem;
-  inset-inline: 1rem;
-  margin: auto;
-  width: fit-content;
-  max-width: calc(100% - 2rem);
-  background: var(--text);
-  color: var(--on-accent);
-  border-radius: 8px;
-  padding: 1rem;
-  z-index: 5;
-  font-size: 0.85rem;
-}
-.toast:empty {
-  display: none;
-}
 .skip-link {
   position: absolute;
   top: -100px;
@@ -1138,14 +1121,6 @@ dialog .select-menu {
 .results {
   font-size: 0.72rem;
 }
-.toast {
-  color: var(--text);
-  background: var(--cream);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  box-shadow: 0 4px 18px var(--shadow);
-}
-.toast:not(:empty),
 dialog[open] {
   animation: surface-in 160ms ease-out;
 }
@@ -1209,7 +1184,6 @@ dialog::backdrop {
     transition: none;
   }
   .select-menu:not([hidden]),
-  .toast:not(:empty),
   dialog[open] {
     animation: none;
   }
@@ -1470,10 +1444,6 @@ input.is-active,
 }
 .arrangement-gallery img {
   background: var(--photo);
-}
-.toast {
-  color: var(--text);
-  background: var(--secondary);
 }
 dialog::backdrop {
   background: var(--backdrop);
@@ -1859,5 +1829,141 @@ html {
 @media (min-width: 1280px) {
   .hero h1 {
     font-size: 42px;
+  }
+}
+
+/* Toast stack: newest at the bottom, auto-dismissed by shared/ui/toast.ts. */
+.toast-region {
+  position: fixed;
+  bottom: 1rem;
+  inset-inline: 1rem;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: fit-content;
+  max-width: min(100%, 26rem);
+  padding: 0.75rem 1rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--accent);
+  border-radius: 8px;
+  box-shadow: 0 4px 18px var(--shadow);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  animation: toast-in 200ms ease-out;
+  transition:
+    opacity 200ms ease-in,
+    transform 200ms ease-in;
+}
+.toast p {
+  margin: 0;
+}
+.toast-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  color: var(--on-accent);
+  background: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.toast--error {
+  background: var(--secondary);
+  border-inline-start-color: var(--accent-hover);
+}
+.toast--error .toast-icon {
+  background: var(--accent-hover);
+}
+.toast.is-leaving {
+  opacity: 0;
+  transform: translateY(6px);
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (min-width: 768px) {
+  .toast-region {
+    align-items: flex-end;
+    inset-inline: auto 1.5rem;
+    bottom: 1.5rem;
+  }
+}
+
+/* Loading skeletons: same card layout as real products, with a soft shimmer. */
+.skeleton-card {
+  pointer-events: none;
+}
+.skeleton {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--secondary);
+  border-radius: 5px;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--surface) 70%, transparent),
+    transparent
+  );
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+.skeleton-card .product-art.skeleton {
+  border-radius: 0;
+}
+.skeleton-line {
+  height: 0.75rem;
+  margin-block: 0.45rem;
+}
+.skeleton-line--short {
+  width: 55%;
+}
+.skeleton-line--price {
+  width: 35%;
+  height: 0.9rem;
+}
+.skeleton-button {
+  height: 2.75rem;
+}
+@keyframes skeleton-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Kept last so it overrides the toast and skeleton animations above. */
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .skeleton::after {
+    animation: none;
+  }
+  .toast {
+    transition: none;
   }
 }
